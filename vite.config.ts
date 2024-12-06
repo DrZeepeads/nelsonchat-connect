@@ -2,14 +2,16 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 import path from "path";
+import { componentTagger } from "lovable-tagger";
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   server: {
     port: 8080,
     host: "::"
   },
   plugins: [
     react(),
+    mode === 'development' && componentTagger(),
     VitePWA({
       registerType: "autoUpdate",
       devOptions: {
@@ -43,8 +45,8 @@ export default defineConfig({
       workbox: {
         runtimeCaching: [
           {
-            urlPattern: ({ url }: { url: URL }) => {
-              return typeof globalThis !== 'undefined' && 'location' in globalThis && globalThis.location instanceof Location ? url.origin === globalThis.location.origin : false;
+            urlPattern: ({ url }) => {
+              return typeof window !== 'undefined' && url.origin === window.location.origin;
             },
             handler: "CacheFirst",
             options: {
@@ -64,10 +66,10 @@ export default defineConfig({
         ],
       },
     }),
-  ],
+  ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-});
+}));
