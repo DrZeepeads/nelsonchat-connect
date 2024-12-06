@@ -16,8 +16,9 @@ const Index = () => {
               Menu
             </MenubarTrigger>
             <MenubarContent>
-              <MenubarItem>
-                Welcome to Nelsonbot - Your AI assistant for pediatric medicine
+              <MenubarItem className="flex flex-col items-start">
+                <span className="font-bold">Welcome to Nelsonbot</span>
+                <span className="text-sm text-muted-foreground">Your AI assistant for pediatric medicine</span>
               </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
