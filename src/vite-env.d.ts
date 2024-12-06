@@ -1,13 +1,15 @@
 /// <reference types="vite/client" />
 
+interface Location {
+  origin: string;
+}
+
 interface Window {
   location: Location;
 }
 
 declare global {
-  interface GlobalThis {
-    location?: Location;
-  }
+  var location: Location | undefined;
 }
 
 export {};
