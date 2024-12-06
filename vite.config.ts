@@ -1,18 +1,10 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import path from "path";
-import { componentTagger } from "lovable-tagger";
+import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "::",
-    port: 8080,
-  },
+export default defineConfig({
   plugins: [
     react(),
-    mode === 'development' && componentTagger(),
     VitePWA({
       registerType: "autoUpdate",
       devOptions: {
@@ -47,7 +39,8 @@ export default defineConfig(({ mode }) => ({
         runtimeCaching: [
           {
             urlPattern: ({ url }: { url: URL }) => {
-              return url.origin === (typeof globalThis !== 'undefined' && 'location' in globalThis ? globalThis.location.origin : '');
+              const origin = typeof window !== 'undefined' ? window.location.origin : '';
+              return url.origin === origin;
             },
             handler: "CacheFirst",
             options: {
@@ -67,10 +60,5 @@ export default defineConfig(({ mode }) => ({
         ],
       },
     }),
-  ].filter(Boolean),
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
-}));
+  ],
+});
