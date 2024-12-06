@@ -4,10 +4,22 @@ import { VitePWA } from "vite-plugin-pwa";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
+declare global {
+  interface Window {
+    location: Location;
+  }
+}
+
 export default defineConfig(({ mode }) => ({
   server: {
     port: 8080,
-    host: "::"
+    host: "::",
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      },
+    },
   },
   plugins: [
     react(),

@@ -1,11 +1,15 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { Database } from 'sqlite3';
 import * as pdfParse from 'pdf-parse';
 import path from 'path';
 import fs from 'fs';
+import cors from 'cors';
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use(cors());
 
 // Initialize SQLite database with FTS5
 const db = new Database('nelson.db', (err) => {
@@ -26,7 +30,7 @@ const db = new Database('nelson.db', (err) => {
 });
 
 // PDF processing endpoint
-app.post('/api/process-pdf', async (req, res) => {
+app.post('/api/process-pdf', async (req: Request, res: Response) => {
   try {
     const pdfPath = path.resolve(__dirname, 'nelson.pdf');
     const dataBuffer = fs.readFileSync(pdfPath);
@@ -53,7 +57,7 @@ app.post('/api/process-pdf', async (req, res) => {
 });
 
 // Search endpoint
-app.get('/api/search', (req, res) => {
+app.get('/api/search', (req: Request, res: Response) => {
   const query = req.query.q as string;
   
   if (!query) {

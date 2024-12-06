@@ -4,9 +4,16 @@ import { Button } from "./ui/button"
 import { Search } from "lucide-react"
 import { useToast } from "./ui/use-toast"
 
+interface SearchResult {
+  page_number: number;
+  title: string;
+  excerpt: string;
+}
+
 export const SearchBox = () => {
   const [query, setQuery] = useState("")
   const [isSearching, setIsSearching] = useState(false)
+  const [results, setResults] = useState<SearchResult[]>([])
   const { toast } = useToast()
 
   const handleSearch = async () => {
@@ -20,16 +27,25 @@ export const SearchBox = () => {
 
     setIsSearching(true)
     try {
-      // TODO: This will be implemented when we set up the backend
-      console.log("Searching for:", query)
-      toast({
-        title: "Search functionality coming soon",
-        description: "Backend integration will be implemented in the next step",
-      })
+      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Search failed')
+      }
+      
+      setResults(data.results)
+      
+      if (data.results.length === 0) {
+        toast({
+          title: "No results found",
+          description: "Try different search terms",
+        })
+      }
     } catch (error) {
       toast({
         title: "Search failed",
-        description: "Please try again later",
+        description: error instanceof Error ? error.message : "Please try again later",
         variant: "destructive",
       })
     } finally {
@@ -53,6 +69,20 @@ export const SearchBox = () => {
           {isSearching ? "Searching..." : "Search"}
         </Button>
       </div>
+      
+      {results.length > 0 && (
+        <div className="mt-6 space-y-4">
+          {results.map((result, index) => (
+            <div key={index} className="p-4 border rounded-lg bg-white shadow-sm">
+              <div className="flex justify-between items-start">
+                <h3 className="font-medium">{result.title}</h3>
+                <span className="text-sm text-gray-500">Page {result.page_number}</span>
+              </div>
+              <p className="mt-2 text-gray-700" dangerouslySetInnerHTML={{ __html: result.excerpt }} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
