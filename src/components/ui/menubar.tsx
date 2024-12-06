@@ -1,8 +1,11 @@
-import * as React from "react"
-import * as MenubarPrimitive from "@radix-ui/react-menubar"
-import { Check, ChevronRight, Circle } from "lucide-react"
+"use client";
 
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import * as MenubarPrimitive from "@radix-ui/react-menubar";
+import { Check, ChevronRight, Circle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { HistoryMenu } from "@/components/HistoryMenu";
 
 const MenubarMenu = MenubarPrimitive.Menu
 
@@ -214,8 +217,28 @@ const MenubarShortcut = ({
 }
 MenubarShortcut.displayname = "MenubarShortcut"
 
+const MenubarWithFeatures = React.forwardRef<
+  React.ElementRef<typeof MenubarPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Root>
+>(({ className, ...props }, ref) => (
+  <MenubarPrimitive.Root
+    ref={ref}
+    className={cn(
+      "flex h-10 items-center space-x-1 rounded-md border bg-background p-1",
+      className
+    )}
+    {...props}
+  >
+    <HistoryMenu />
+    <div className="ml-auto">
+      <ThemeToggle />
+    </div>
+  </MenubarPrimitive.Root>
+));
+MenubarWithFeatures.displayName = "MenubarWithFeatures";
+
 export {
-  Menubar,
+  MenubarWithFeatures as Menubar,
   MenubarMenu,
   MenubarTrigger,
   MenubarContent,
@@ -231,4 +254,4 @@ export {
   MenubarGroup,
   MenubarSub,
   MenubarShortcut,
-}
+};
