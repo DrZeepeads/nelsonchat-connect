@@ -4,6 +4,7 @@ import Header from "@/components/Header"
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar"
 import { Menu } from "lucide-react"
 import ChatArea from "@/components/ChatArea"
+import { SearchBox } from "@/components/SearchBox"
 
 const Index = () => {
   return (
@@ -24,6 +25,9 @@ const Index = () => {
             </MenubarContent>
           </MenubarMenu>
         </Menubar>
+        <div className="p-4">
+          <SearchBox />
+        </div>
         <div className="flex flex-1">
           <AppSidebar />
           <ChatArea />
