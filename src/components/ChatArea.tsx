@@ -1,11 +1,15 @@
 import React from "react";
+import ChatInput from "./ChatInput";
 
 const ChatArea: React.FC = () => (
-  <main className="flex-grow p-4 overflow-y-auto">
-    <div className="bg-gray-100 p-4 rounded shadow">
-      <p className="text-gray-800">Welcome to Nelsonbot!</p>
+  <main className="flex-grow flex flex-col">
+    <div className="flex-grow p-4 overflow-y-auto">
+      <div className="bg-accent p-4 rounded shadow">
+        <p className="text-accent-foreground">Welcome to Nelsonbot!</p>
+      </div>
+      {/* Replace with dynamic chat messages */}
     </div>
-    {/* Replace with dynamic chat messages */}
+    <ChatInput />
   </main>
 );
 
