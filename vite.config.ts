@@ -1,8 +1,13 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
+import path from "path";
 
 export default defineConfig({
+  server: {
+    port: 8080,
+    host: "::"
+  },
   plugins: [
     react(),
     VitePWA({
@@ -39,7 +44,7 @@ export default defineConfig({
         runtimeCaching: [
           {
             urlPattern: ({ url }: { url: URL }) => {
-              const origin = typeof window !== 'undefined' ? window.location.origin : '';
+              const origin = typeof globalThis !== 'undefined' ? globalThis.location?.origin : '';
               return url.origin === origin;
             },
             handler: "CacheFirst",
@@ -61,4 +66,9 @@ export default defineConfig({
       },
     }),
   ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
 });
