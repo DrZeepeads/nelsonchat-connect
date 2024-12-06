@@ -3,6 +3,7 @@ import AppSidebar from "@/components/AppSidebar"
 import Header from "@/components/Header"
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar"
 import { Menu } from "lucide-react"
+import ChatArea from "@/components/ChatArea"
 
 const Index = () => {
   return (
@@ -25,10 +26,7 @@ const Index = () => {
         </Menubar>
         <div className="flex flex-1">
           <AppSidebar />
-          <main className="flex-1 p-6">
-            <div className="text-center">
-            </div>
-          </main>
+          <ChatArea />
         </div>
       </div>
     </SidebarProvider>
