@@ -44,8 +44,7 @@ export default defineConfig({
         runtimeCaching: [
           {
             urlPattern: ({ url }: { url: URL }) => {
-              const origin = typeof globalThis !== 'undefined' && globalThis.location ? globalThis.location.origin : '';
-              return url.origin === origin;
+              return typeof location !== 'undefined' ? url.origin === location.origin : false;
             },
             handler: "CacheFirst",
             options: {
