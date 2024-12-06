@@ -46,7 +46,9 @@ export default defineConfig(({ mode }) => ({
       workbox: {
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => url.origin === self.location.origin,
+            urlPattern: ({ url }: { url: URL }) => {
+              return url.origin === (typeof window !== 'undefined' ? window.location.origin : '');
+            },
             handler: "CacheFirst",
             options: {
               cacheName: "static-resources",
