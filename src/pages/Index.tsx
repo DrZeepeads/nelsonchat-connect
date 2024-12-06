@@ -17,7 +17,7 @@ const Index = () => {
             </MenubarTrigger>
             <MenubarContent>
               <MenubarItem>
-                Your AI assistant for pediatric medicine
+                Welcome to Nelsonbot - Your AI assistant for pediatric medicine
               </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
@@ -26,7 +26,6 @@ const Index = () => {
           <AppSidebar />
           <main className="flex-1 p-6">
             <div className="text-center">
-              <h2 className="text-2xl font-bold mb-4">Welcome to Nelsonbot</h2>
             </div>
           </main>
         </div>
