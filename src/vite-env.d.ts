@@ -5,7 +5,6 @@ interface Window {
 }
 
 declare global {
-  var location: Location | undefined;
   interface GlobalThis {
     location?: Location;
   }
