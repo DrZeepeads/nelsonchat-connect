@@ -19,8 +19,7 @@ const ChatArea: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       type: "bot",
-      content:
-        "👋 Welcome to NelsonBot! I’m here to assist you with AI-enhanced pediatric care. You can ask me questions or search the Nelson Textbook by typing `/search` followed by your query.",
+      content: "👋 Welcome to NelsonBot! I'm here to assist you with AI-enhanced pediatric care. You can ask me questions or search the Nelson Textbook by typing `/search` followed by your query.",
       timestamp: new Date(),
     },
   ]);
@@ -47,7 +46,6 @@ const ChatArea: React.FC = () => {
     setMessages((prev) => [...prev, newMessage]);
     setIsLoading(true);
 
-    // Simulate bot response delay
     setTimeout(() => {
       const botMessage: Message = {
         type: "bot",
@@ -61,7 +59,6 @@ const ChatArea: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full h-screen bg-gray-100">
-      {/* Chat messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((msg, index) => (
           <div
@@ -79,7 +76,7 @@ const ChatArea: React.FC = () => {
             >
               {msg.type === "search" && Array.isArray(msg.content) ? (
                 <ul>
-                  {msg.content.map((result, i) => (
+                  {(msg.content as SearchResult[]).map((result, i) => (
                     <li key={i} className="text-sm">
                       <strong>Volume:</strong> {result.volume} -{" "}
                       <em>{result.text}</em> (Relevance: {result.relevance})
@@ -87,7 +84,7 @@ const ChatArea: React.FC = () => {
                   ))}
                 </ul>
               ) : (
-                <p>{msg.content}</p>
+                <p>{msg.content as string}</p>
               )}
             </div>
           </div>
@@ -100,15 +97,11 @@ const ChatArea: React.FC = () => {
             </div>
           </div>
         )}
-        <div ref={messagesEndRef}></div>
+        <div ref={messagesEndRef} />
       </div>
 
-      {/* Input area */}
       <div className="p-4 bg-white border-t border-gray-300">
-        <ChatInput
-          onSendMessage={sendMessage}
-          placeholder="Type a message or /search for the textbook..."
-        />
+        <ChatInput onSendMessage={sendMessage} disabled={isLoading} />
       </div>
     </div>
   );

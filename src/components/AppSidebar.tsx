@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Menu, X, Sun, Moon, LogIn, LogOut, History } from "lucide-react";
-import { Button, Menu as DropdownMenu } from "@/components/ui"; // Assuming these are custom components
+import { Button } from "@/components/ui/button";
+import { DropdownMenu } from "@/components/ui/dropdown-menu";
 
 const MenuBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,24 +22,20 @@ const MenuBar = () => {
           )}
         </button>
         {isOpen && (
-          <DropdownMenu className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 z-50">
-            <DropdownMenu.Item>
+          <DropdownMenu>
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 z-50">
               <Button 
                 className="w-full flex justify-start items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
                 variant="ghost"
               >
                 <LogIn className="mr-2 h-4 w-4" /> Sign In
               </Button>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item>
               <Button 
                 className="w-full flex justify-start items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
                 variant="ghost"
               >
                 <LogOut className="mr-2 h-4 w-4" /> Sign Out
               </Button>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item>
               <Button 
                 className="w-full flex justify-start items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
                 variant="ghost"
@@ -46,8 +43,6 @@ const MenuBar = () => {
               >
                 <History className="mr-2 h-4 w-4" /> Chat History
               </Button>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item>
               <Button 
                 className="w-full flex justify-start items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
                 variant="ghost"
@@ -63,7 +58,7 @@ const MenuBar = () => {
                   </>
                 )}
               </Button>
-            </DropdownMenu.Item>
+            </div>
           </DropdownMenu>
         )}
       </div>
