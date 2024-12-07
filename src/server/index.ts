@@ -3,6 +3,7 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import pdf from 'pdf-parse';
+import { SearchResponse, SearchError } from '../types/search';
 
 const app = express();
 app.use(cors());
@@ -52,8 +53,8 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-// Define route handler with proper types
-app.get('/api/search', (req: express.Request, res: express.Response) => {
+// Search endpoint
+const searchHandler = async (req: express.Request, res: express.Response) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
@@ -90,7 +91,9 @@ app.get('/api/search', (req: express.Request, res: express.Response) => {
     console.error('Search error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-});
+};
+
+app.get('/api/search', searchHandler);
 
 if (require.main === module) {
   app.listen(PORT, () => {
