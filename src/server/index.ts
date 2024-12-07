@@ -44,8 +44,7 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-// Define search endpoint with proper typing
-app.get('/api/search', async (req: Request, res: Response) => {
+app.get('/api/search', (req: Request, res: Response) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
@@ -63,7 +62,6 @@ app.get('/api/search', async (req: Request, res: Response) => {
       contentToSearch = volume1Content + '\n' + volume2Content;
     }
 
-    // Implement search logic
     const sentences = contentToSearch.split(/[.!?]+/);
     const results = sentences
       .filter(sentence => 
@@ -85,7 +83,6 @@ app.get('/api/search', async (req: Request, res: Response) => {
   }
 });
 
-// Start the server
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
