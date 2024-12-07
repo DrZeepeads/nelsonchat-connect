@@ -44,6 +44,7 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
+// Search endpoint
 app.get('/api/search', async (req: Request, res: Response) => {
   try {
     const query = req.query.q as string;

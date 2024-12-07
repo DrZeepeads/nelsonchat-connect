@@ -52,7 +52,7 @@ export default defineConfig(({ mode }) => ({
         runtimeCaching: [
           {
             urlPattern: ({ url }) => {
-              return typeof window !== 'undefined' && url.origin === new URL(url.href).origin;
+              return url.origin === new URL(url.href).origin;
             },
             handler: "CacheFirst",
             options: {
