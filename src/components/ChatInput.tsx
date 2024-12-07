@@ -1,11 +1,22 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 
-const ChatInput: React.FC = () => {
+interface SearchResult {
+  text: string;
+  volume: string;
+  relevance: number;
+}
+
+interface ChatInputProps {
+  onSendMessage: (message: string, results?: SearchResult[]) => void;
+}
+
+const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,8 +30,9 @@ const ChatInput: React.FC = () => {
       return;
     }
 
+    setIsLoading(true);
+
     try {
-      // If message starts with '/', treat it as a search query
       if (message.startsWith('/')) {
         const searchQuery = message.substring(1);
         const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}`);
@@ -30,11 +42,9 @@ const ChatInput: React.FC = () => {
           throw new Error(data.error || 'Search failed');
         }
         
-        console.log('Search results:', data.results);
-        // Handle search results here
+        onSendMessage(message, data.results);
       } else {
-        // Handle regular chat message
-        console.log("Chat message:", message);
+        onSendMessage(message);
       }
     } catch (error) {
       toast({
@@ -42,9 +52,10 @@ const ChatInput: React.FC = () => {
         description: error instanceof Error ? error.message : "Please try again later",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
+      setMessage("");
     }
-
-    setMessage("");
   };
 
   return (
@@ -58,9 +69,16 @@ const ChatInput: React.FC = () => {
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Type a message or /search to search..."
         className="flex-grow"
+        disabled={isLoading}
       />
-      <Button type="submit">
-        {message.startsWith('/') ? <Search className="h-4 w-4" /> : "Send"}
+      <Button type="submit" disabled={isLoading}>
+        {isLoading ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : message.startsWith('/') ? (
+          <Search className="h-4 w-4" />
+        ) : (
+          "Send"
+        )}
       </Button>
     </form>
   );
