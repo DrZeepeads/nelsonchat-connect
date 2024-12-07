@@ -1,50 +1,74 @@
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { History, LogIn } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import React, { useState } from "react";
+import { Menu, X, Sun, Moon, LogIn, LogOut, History } from "lucide-react";
+import { Button, Menu as DropdownMenu } from "@/components/ui"; // Assuming these are custom components
 
-const AppSidebar = () => {
-  const conversations = [
-    { id: 1, title: "Conversation 1" },
-    { id: 2, title: "Conversation 2" },
-  ]
+const MenuBar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
   return (
-    <Sidebar>
-      <SidebarHeader>
-        <Button className="w-full" variant="default">
-          <LogIn className="mr-2" />
-          Sign In/Up
-        </Button>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Chat History</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {conversations.map((conversation) => (
-                <SidebarMenuItem key={conversation.id}>
-                  <SidebarMenuButton>
-                    <History className="mr-2" />
-                    <span>{conversation.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
-  )
-}
+    <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
+      <div className="text-xl font-bold">NelsonBot</div>
+      <div className="relative">
+        <button onClick={toggleMenu} className="focus:outline-none">
+          {isOpen ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <Menu className="w-6 h-6" />
+          )}
+        </button>
+        {isOpen && (
+          <DropdownMenu className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 z-50">
+            <DropdownMenu.Item>
+              <Button 
+                className="w-full flex justify-start items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                variant="ghost"
+              >
+                <LogIn className="mr-2 h-4 w-4" /> Sign In
+              </Button>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item>
+              <Button 
+                className="w-full flex justify-start items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                variant="ghost"
+              >
+                <LogOut className="mr-2 h-4 w-4" /> Sign Out
+              </Button>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item>
+              <Button 
+                className="w-full flex justify-start items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                variant="ghost"
+                onClick={() => console.log("History clicked")}
+              >
+                <History className="mr-2 h-4 w-4" /> Chat History
+              </Button>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item>
+              <Button 
+                className="w-full flex justify-start items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                variant="ghost"
+                onClick={toggleDarkMode}
+              >
+                {isDarkMode ? (
+                  <>
+                    <Sun className="mr-2 h-4 w-4" /> Light Mode
+                  </>
+                ) : (
+                  <>
+                    <Moon className="mr-2 h-4 w-4" /> Dark Mode
+                  </>
+                )}
+              </Button>
+            </DropdownMenu.Item>
+          </DropdownMenu>
+        )}
+      </div>
+    </nav>
+  );
+};
 
-export default AppSidebar
+export default MenuBar;
