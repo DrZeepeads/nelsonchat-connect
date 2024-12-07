@@ -5,6 +5,7 @@ import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger, Menu
 import { Menu, LogIn, UserPlus, History, Home } from "lucide-react"
 import ChatArea from "@/components/ChatArea"
 import { SearchBox } from "@/components/SearchBox"
+import FileUpload from "@/components/FileUpload"
 
 const Index = () => {
   return (
@@ -12,7 +13,7 @@ const Index = () => {
       <div className="min-h-screen flex w-full flex-col">
         <Header />
         <div className="fixed top-0 left-0 right-0 z-50">
-          <div className="h-2 w-full hover-trigger" /> {/* Hover trigger area */}
+          <div className="h-2 w-full hover-trigger" />
           <Menubar className="border-t border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out transform -translate-y-full group-hover/menu:translate-y-0 hover:translate-y-0 w-full shadow-md">
             <MenubarMenu>
               <MenubarTrigger className="cursor-pointer hover:bg-accent/50 transition-colors duration-200">
@@ -42,8 +43,9 @@ const Index = () => {
             </MenubarMenu>
           </Menubar>
         </div>
-        <div className="p-4">
+        <div className="p-4 space-y-4">
           <SearchBox />
+          <FileUpload />
         </div>
         <div className="flex flex-1">
           <AppSidebar />
