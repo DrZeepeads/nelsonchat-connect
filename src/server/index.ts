@@ -52,11 +52,7 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-// Define route handler separately with proper types
-const searchHandler = async (
-  req: express.Request,
-  res: express.Response
-): Promise<express.Response> => {
+app.get('/api/search', (req: express.Request, res: express.Response) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
@@ -93,10 +89,7 @@ const searchHandler = async (
     console.error('Search error:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
-};
-
-// Register the route handler
-app.get('/api/search', searchHandler);
+});
 
 if (require.main === module) {
   app.listen(PORT, () => {
