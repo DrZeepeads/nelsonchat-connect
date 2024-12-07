@@ -1,6 +1,3 @@
-Here's the modified `ChatArea` component with the requested changes:
-
-```jsx
 import React, { useState, useRef, useEffect } from "react";
 import ChatInput from "./ChatInput";
 import { Button } from "./ui/button";
@@ -13,17 +10,20 @@ interface SearchResult {
 }
 
 interface Message {
-  type: 'user' | 'bot' | 'search';
+  type: "user" | "bot" | "search";
   content: string | SearchResult[];
   timestamp: Date;
 }
 
 const ChatArea: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([{
-    type: 'bot',
-    content: 'Welcome to Nelsonbot! You can chat with me or search the Nelson Textbook by typing /search followed by your query.',
-    timestamp: new Date()
-  }]);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      type: "bot",
+      content:
+        "👋 Welcome to NelsonBot! I’m here to assist you with AI-enhanced pediatric care. You can ask me questions or search the Nelson Textbook by typing `/search` followed by your query.",
+      timestamp: new Date(),
+    },
+  ]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -35,105 +35,82 @@ const ChatArea: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleNewMessage = async (message: string) => {
+  const sendMessage = async (message: string) => {
+    if (!message.trim()) return;
+
+    const newMessage: Message = {
+      type: "user",
+      content: message,
+      timestamp: new Date(),
+    };
+
+    setMessages((prev) => [...prev, newMessage]);
     setIsLoading(true);
-    try {
-      if (message.startsWith('/search')) {
-        const searchQuery = message.substring(7).trim();
-        const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}`);
-        const data = await response.json();
-        
-        if (!response.ok) {
-          throw new Error(data.error || 'Search failed');
-        }
-        
-        setMessages(prev => [...prev, 
-          {
-            type: 'user',
-            content: message,
-            timestamp: new Date()
-          },
-          {
-            type: 'search',
-            content: data.results,
-            timestamp: new Date()
-          }
-        ]);
-      } else {
-        setMessages(prev => [...prev, {
-          type: 'user',
-          content: message,
-          timestamp: new Date()
-        }]);
-        
-        // Simulate bot response
-        setTimeout(() => {
-          setMessages(prev => [...prev, {
-            type: 'bot',
-            content: "I'm a chatbot designed to help you search through medical information. Try using /search followed by your query!",
-            timestamp: new Date()
-          }]);
-        }, 1000);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setMessages(prev => [...prev, {
-        type: 'bot',
-        content: 'Sorry, there was an error processing your request. Please try again.',
-        timestamp: new Date()
-      }]);
-    } finally {
+
+    // Simulate bot response delay
+    setTimeout(() => {
+      const botMessage: Message = {
+        type: "bot",
+        content: `You asked: "${message}". This is a placeholder response. Please wait for AI integration!`,
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, botMessage]);
       setIsLoading(false);
-    }
+    }, 1500);
   };
 
   return (
-    <main className="flex-grow flex flex-col bg-white">
-      <div className="flex-grow p-4 overflow-y-auto space-y-4">
-        {messages.map((message, index) => (
-          <div key={index} className={`${
-            message.type === 'user' ? 'flex justify-end' : 'flex justify-start'
-          } animate-fade-in`}>
-            <div className={`${
-              message.type === 'user' 
-                ? 'bg-blue-100' 
-                : message.type === 'search' 
-                  ? 'bg-gray-100' 
-                  : 'bg-gray-300'
-            } p-4 rounded-lg shadow-sm max-w-[80%]`}>
-              {message.type === 'search' ? (
-                <div className="space-y-2">
-                  <h3 className="font-medium text-gray-700">Search Results:</h3>
-                  {(message.content as SearchResult[]).map((result, idx) => (
-                    <div key={idx} className="bg-white p-2 rounded hover:bg-gray-50 transition-colors border border-gray-300">
-                      <p className="text-sm text-gray-700">{result.text}</p>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Volume: {result.volume} | Relevance: {result.relevance}
-                      </p>
-                    </div>
+    <div className="flex flex-col w-full h-screen bg-gray-100">
+      {/* Chat messages */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`flex ${
+              msg.type === "user" ? "justify-end" : "justify-start"
+            }`}
+          >
+            <div
+              className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg shadow-sm ${
+                msg.type === "user"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-800"
+              }`}
+            >
+              {msg.type === "search" && Array.isArray(msg.content) ? (
+                <ul>
+                  {msg.content.map((result, i) => (
+                    <li key={i} className="text-sm">
+                      <strong>Volume:</strong> {result.volume} -{" "}
+                      <em>{result.text}</em> (Relevance: {result.relevance})
+                    </li>
                   ))}
-                </div>
+                </ul>
               ) : (
-                <p className={message.type === 'user' ? 'text-blue-700' : 'text-gray-700'}>
-                  {message.content as string}
-                </p>
+                <p>{msg.content}</p>
               )}
             </div>
           </div>
         ))}
-        <div ref={messagesEndRef} />
-      </div>
-      <div className="relative">
         {isLoading && (
-          <div className="absolute top-0 left-0 right-0 flex justify-center">
-            <div className="bg-blue-500/80 px-4 py-2 rounded-t-lg shadow-lg">
-              <Loader2 className="h-4 w-4 animate-spin text-white" />
+          <div className="flex justify-start">
+            <div className="flex items-center space-x-2 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg shadow-sm">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>Thinking...</span>
             </div>
           </div>
         )}
-        <ChatInput onSendMessage={handleNewMessage} disabled={isLoading} />
+        <div ref={messagesEndRef}></div>
       </div>
-    </main>
+
+      {/* Input area */}
+      <div className="p-4 bg-white border-t border-gray-300">
+        <ChatInput
+          onSendMessage={sendMessage}
+          placeholder="Type a message or /search for the textbook..."
+        />
+      </div>
+    </div>
   );
 };
 
