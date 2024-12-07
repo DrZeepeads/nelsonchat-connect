@@ -11,7 +11,7 @@ const Index = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full flex-col">
         <Header />
-        <Menubar className="border-t border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-500 ease-in-out transform hover:translate-y-0 -translate-y-0 shadow-sm">
+        <Menubar className="border-t border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-500 ease-in-out transform -translate-y-full hover:translate-y-0 absolute w-full z-50 shadow-sm">
           <MenubarMenu>
             <MenubarTrigger className="cursor-pointer hover:bg-accent/50 transition-colors duration-300">
               <Menu className="h-4 w-4 mr-2" />
