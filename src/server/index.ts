@@ -3,6 +3,7 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import pdf from 'pdf-parse';
+import { SearchResponse, SearchError } from '../types/search';
 
 const app = express();
 app.use(cors());
@@ -10,17 +11,24 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 
-// Create directories for both volumes
-const volume1Dir = path.join(__dirname, 'Nelson book of pediatrics volume 1');
-const volume2Dir = path.join(__dirname, 'Nelson book of pediatrics volume 2');
+// Create directories using absolute paths
+const baseDir = path.resolve(__dirname, '../../');
+const volume1Dir = path.join(baseDir, 'Nelson book of pediatrics volume 1');
+const volume2Dir = path.join(baseDir, 'Nelson book of pediatrics volume 2');
+const textFilesDir = path.join(__dirname, 'text-files');
 
-if (!fs.existsSync(volume1Dir)) {
-  fs.mkdirSync(volume1Dir, { recursive: true });
-}
+console.log('Base directory:', baseDir);
+console.log('Volume 1 directory:', volume1Dir);
+console.log('Volume 2 directory:', volume2Dir);
+console.log('Text files directory:', textFilesDir);
 
-if (!fs.existsSync(volume2Dir)) {
-  fs.mkdirSync(volume2Dir, { recursive: true });
-}
+// Create directories if they don't exist
+[volume1Dir, volume2Dir, textFilesDir].forEach(dir => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+    console.log(`Created directory: ${dir}`);
+  }
+});
 
 // Read and parse PDF files
 let volume1Content = '';
@@ -46,6 +54,7 @@ try {
 
 // Define search endpoint with proper typing
 app.get('/api/search', async (req: Request, res: Response) => {
+app.get('/api/search', (req: express.Request, res: express.Response) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
@@ -78,10 +87,10 @@ app.get('/api/search', async (req: Request, res: Response) => {
       .sort((a, b) => b.relevance - a.relevance)
       .slice(0, 10);
 
-    res.json({ results });
+    return res.json({ results });
   } catch (error) {
     console.error('Search error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -91,3 +100,10 @@ const server = app.listen(PORT, () => {
 });
 
 export default server;
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+export default app;
