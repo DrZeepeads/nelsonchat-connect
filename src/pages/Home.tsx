@@ -5,10 +5,16 @@ import ChatArea from "../components/ChatArea";
 
 const Home: React.FC = () => (
   <div className="min-h-screen flex flex-col">
+    {/* Header section */}
     <Header />
+
+    {/* Main content area */}
     <div className="flex-grow flex">
-      <AppSidebar />
-      <ChatArea />
+      {/* Sidebar */}
+      <AppSidebar role="complementary" className="w-64" />
+
+      {/* Chat Area */}
+      <ChatArea role="main" className="flex-grow" />
     </div>
   </div>
 );
