@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
@@ -15,9 +15,11 @@ const baseDir = path.resolve(__dirname, '../../');
 const volume1Dir = path.join(baseDir, 'Nelson book of pediatrics volume 1');
 const volume2Dir = path.join(baseDir, 'Nelson book of pediatrics volume 2');
 
+console.log('Base directory:', baseDir);
 console.log('Volume 1 directory:', volume1Dir);
 console.log('Volume 2 directory:', volume2Dir);
 
+// Create directories if they don't exist
 if (!fs.existsSync(volume1Dir)) {
   fs.mkdirSync(volume1Dir, { recursive: true });
   console.log('Created Volume 1 directory');
@@ -50,7 +52,8 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-app.get('/api/search', (req: Request, res: Response) => {
+// Define route handler with proper types
+app.get('/api/search', (req: express.Request, res: express.Response) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
@@ -89,8 +92,10 @@ app.get('/api/search', (req: Request, res: Response) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
 export default app;
