@@ -3,7 +3,6 @@ import AppSidebar from "@/components/AppSidebar"
 import Header from "@/components/Header"
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger, MenubarSeparator } from "@/components/ui/menubar"
 import { Menu, LogIn, UserPlus, History, Home } from "lucide-react"
-import { SearchBox } from "@/components/SearchBox"
 import ChatArea from "@/components/ChatArea"
 
 const Index = () => {
@@ -41,9 +40,6 @@ const Index = () => {
               </MenubarContent>
             </MenubarMenu>
           </Menubar>
-        </div>
-        <div className="p-4 space-y-4">
-          <SearchBox />
         </div>
         <div className="flex flex-1">
           <AppSidebar />
