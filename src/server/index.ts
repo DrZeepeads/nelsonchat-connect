@@ -52,13 +52,13 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-app.get('/api/search', (req: express.Request, res: express.Response) => {
+app.get('/api/search', async (req: express.Request, res: express.Response) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
 
     if (!query) {
-      return res.status(400).json({ error: 'Query parameter is required' });
+      return res.status(400).json({ error: 'Query parameter is required' } as SearchError);
     }
 
     let contentToSearch = '';
@@ -84,10 +84,10 @@ app.get('/api/search', (req: express.Request, res: express.Response) => {
       .sort((a, b) => b.relevance - a.relevance)
       .slice(0, 10);
 
-    return res.json({ results });
+    return res.json({ results } as SearchResponse);
   } catch (error) {
     console.error('Search error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' } as SearchError);
   }
 });
 
