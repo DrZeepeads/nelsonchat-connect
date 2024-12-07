@@ -44,7 +44,7 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-app.get('/api/search', async (req: Request, res: Response) => {
+const searchHandler = async (req: Request, res: Response) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
@@ -70,12 +70,14 @@ app.get('/api/search', async (req: Request, res: Response) => {
       .map(sentence => sentence.trim())
       .filter(sentence => sentence.length > 0);
 
-    return res.json({ results });
+    res.json({ results });
   } catch (error) {
     console.error('Search error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
-});
+};
+
+app.get('/api/search', searchHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
