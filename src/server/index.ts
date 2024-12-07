@@ -1,85 +1,47 @@
 import express, { Request, Response } from 'express';
-import { Database } from 'sqlite3';
-import * as pdfParse from 'pdf-parse';
-import path from 'path';
-import fs from 'fs';
 import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
+import pdf from 'pdf-parse';
 
 const app = express();
-const port = process.env.PORT || 3000;
-
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-// Initialize SQLite database with FTS5
-const db = new Database('nelson.db', (err) => {
-  if (err) {
-    console.error('Database initialization error:', err);
-  } else {
-    console.log('Connected to SQLite database');
-    // Create FTS5 table for full-text search
-    db.run(`
-      CREATE VIRTUAL TABLE IF NOT EXISTS nelson_content USING fts5(
-        page_number,
-        content,
-        title,
-        tokenize='porter unicode61'
-      )
-    `);
-  }
-});
+const PORT = process.env.PORT || 3001;
 
-// PDF processing endpoint
-app.post('/api/process-pdf', async (req: Request, res: Response) => {
-  try {
-    const pdfPath = path.resolve(__dirname, 'nelson.pdf');
-    const dataBuffer = fs.readFileSync(pdfPath);
-    
-    const data = await pdfParse(dataBuffer);
-    
-    // Process PDF content page by page
-    const pages = data.text.split(/\f/); // Split by form feed character
-    
-    // Insert pages into SQLite
-    const stmt = db.prepare('INSERT INTO nelson_content (page_number, content, title) VALUES (?, ?, ?)');
-    
-    pages.forEach((content, index) => {
-      stmt.run(index + 1, content.trim(), `Page ${index + 1}`);
-    });
-    
-    stmt.finalize();
-    
-    res.json({ success: true, pageCount: pages.length });
-  } catch (error) {
-    console.error('PDF processing error:', error);
-    res.status(500).json({ error: 'Failed to process PDF' });
-  }
+// Read and parse PDF file
+const dataBuffer = fs.readFileSync(path.join(__dirname, 'nelson.pdf'));
+
+let pdfContent = '';
+pdf(dataBuffer).then(data => {
+  pdfContent = data.text;
 });
 
 // Search endpoint
-app.get('/api/search', (req: Request, res: Response) => {
-  const query = req.query.q as string;
-  
-  if (!query) {
-    return res.status(400).json({ error: 'Query parameter required' });
-  }
-  
-  db.all(
-    `SELECT page_number, title, snippet(nelson_content, 2, '<b>', '</b>', '...', 64) as excerpt
-     FROM nelson_content 
-     WHERE content MATCH ? 
-     ORDER BY rank`,
-    query,
-    (err, rows) => {
-      if (err) {
-        console.error('Search error:', err);
-        return res.status(500).json({ error: 'Search failed' });
-      }
-      res.json({ results: rows });
+app.get('/api/search', async (req: Request, res: Response) => {
+  try {
+    const query = req.query.q as string;
+    if (!query) {
+      return res.status(400).json({ error: 'Query parameter is required' });
     }
-  );
+
+    // Simple search implementation
+    const sentences = pdfContent.split(/[.!?]+/);
+    const results = sentences
+      .filter(sentence => 
+        sentence.toLowerCase().includes(query.toLowerCase())
+      )
+      .map(sentence => sentence.trim())
+      .filter(sentence => sentence.length > 0);
+
+    return res.json({ results });
+  } catch (error) {
+    console.error('Search error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
