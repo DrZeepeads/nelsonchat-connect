@@ -11,7 +11,6 @@ const Header: React.FC = () => (
       <span className="text-lg font-medium">AI-Enhanced Pediatric Care</span>
     </div>
     <div className="text-sm text-center">
-      Welcome to Nelsonbot! You can chat with me or search the Nelson Textbook by typing /search followed by your query.
     </div>
   </header>
 );
