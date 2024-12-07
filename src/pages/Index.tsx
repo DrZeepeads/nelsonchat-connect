@@ -5,6 +5,7 @@ import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger, Menu
 import { Menu, LogIn, UserPlus, History, Home } from "lucide-react"
 import { SearchBox } from "@/components/SearchBox"
 import FileUpload from "@/components/FileUpload"
+import ChatArea from "@/components/ChatArea"
 
 const Index = () => {
   return (
@@ -48,6 +49,7 @@ const Index = () => {
         </div>
         <div className="flex flex-1">
           <AppSidebar />
+          <ChatArea />
         </div>
       </div>
     </SidebarProvider>

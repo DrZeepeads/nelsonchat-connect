@@ -44,7 +44,7 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-const searchHandler = async (req: Request, res: Response) => {
+app.get('/api/search', async (req: Request, res: Response) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
@@ -75,9 +75,7 @@ const searchHandler = async (req: Request, res: Response) => {
     console.error('Search error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-};
-
-app.get('/api/search', searchHandler);
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
