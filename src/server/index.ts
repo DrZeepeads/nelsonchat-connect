@@ -36,18 +36,27 @@ let volume2Content = '';
 
 try {
   const volume1Buffer = fs.readFileSync(path.join(volume1Dir, 'nelson_vol1.pdf'));
-  const volume2Buffer = fs.readFileSync(path.join(volume2Dir, 'nelson_vol2.pdf'));
-
-  Promise.all([
-    pdf(volume1Buffer),
-    pdf(volume2Buffer)
-  ]).then(([data1, data2]) => {
-    volume1Content = data1.text;
-    volume2Content = data2.text;
-    console.log('PDF files loaded successfully');
+  console.log('Successfully read Volume 1 PDF');
+  
+  pdf(volume1Buffer).then(data => {
+    volume1Content = data.text;
+    console.log('Successfully parsed Volume 1 PDF');
   }).catch(err => {
-    console.error('Error parsing PDF files:', err);
+    console.error('Error parsing Volume 1 PDF:', err);
   });
+
+  // Try to read Volume 2 if it exists
+  try {
+    const volume2Buffer = fs.readFileSync(path.join(volume2Dir, 'nelson_vol2.pdf'));
+    pdf(volume2Buffer).then(data => {
+      volume2Content = data.text;
+      console.log('Successfully parsed Volume 2 PDF');
+    }).catch(err => {
+      console.error('Error parsing Volume 2 PDF:', err);
+    });
+  } catch (err) {
+    console.log('Volume 2 not found yet');
+  }
 } catch (err) {
   console.error('Error reading PDF files:', err);
 }
@@ -55,12 +64,14 @@ try {
 // Define search endpoint with proper typing
 app.get('/api/search', async (req: Request, res: Response) => {
 app.get('/api/search', (req: express.Request, res: express.Response) => {
+// Define the search route handler with proper type annotations
+const searchHandler = async (req: Request, res: Response) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
 
     if (!query) {
-      return res.status(400).json({ error: 'Query parameter is required' });
+      return res.status(400).json({ error: 'Query parameter is required' } as SearchError);
     }
 
     let contentToSearch = '';
@@ -87,12 +98,15 @@ app.get('/api/search', (req: express.Request, res: express.Response) => {
       .sort((a, b) => b.relevance - a.relevance)
       .slice(0, 10);
 
-    return res.json({ results });
+    return res.json({ results } as SearchResponse);
   } catch (error) {
     console.error('Search error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' } as SearchError);
   }
-});
+};
+
+// Register the route handler
+app.get('/api/search', searchHandler);
 
 // Start the server
 const server = app.listen(PORT, () => {
@@ -100,10 +114,13 @@ const server = app.listen(PORT, () => {
 });
 
 export default server;
+// Start the server if this file is run directly
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 }
 
+export default app;
+// Export the app for testing or external use
 export default app;
