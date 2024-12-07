@@ -1,3 +1,6 @@
+Here's the modified `ChatArea` component with the requested changes:
+
+```jsx
 import React, { useState, useRef, useEffect } from "react";
 import ChatInput from "./ChatInput";
 import { Button } from "./ui/button";
@@ -85,7 +88,7 @@ const ChatArea: React.FC = () => {
   };
 
   return (
-    <main className="flex-grow flex flex-col">
+    <main className="flex-grow flex flex-col bg-white">
       <div className="flex-grow p-4 overflow-y-auto space-y-4">
         {messages.map((message, index) => (
           <div key={index} className={`${
@@ -93,25 +96,25 @@ const ChatArea: React.FC = () => {
           } animate-fade-in`}>
             <div className={`${
               message.type === 'user' 
-                ? 'bg-primary/10' 
+                ? 'bg-blue-100' 
                 : message.type === 'search' 
-                  ? 'bg-accent/80' 
-                  : 'bg-accent'
+                  ? 'bg-gray-100' 
+                  : 'bg-gray-300'
             } p-4 rounded-lg shadow-sm max-w-[80%]`}>
               {message.type === 'search' ? (
                 <div className="space-y-2">
-                  <h3 className="font-medium">Search Results:</h3>
+                  <h3 className="font-medium text-gray-700">Search Results:</h3>
                   {(message.content as SearchResult[]).map((result, idx) => (
-                    <div key={idx} className="bg-background/50 p-2 rounded hover:bg-background/70 transition-colors">
-                      <p className="text-sm">{result.text}</p>
-                      <p className="text-xs text-muted-foreground mt-1">
+                    <div key={idx} className="bg-white p-2 rounded hover:bg-gray-50 transition-colors border border-gray-300">
+                      <p className="text-sm text-gray-700">{result.text}</p>
+                      <p className="text-xs text-gray-500 mt-1">
                         Volume: {result.volume} | Relevance: {result.relevance}
                       </p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className={message.type === 'user' ? 'text-primary' : 'text-accent-foreground'}>
+                <p className={message.type === 'user' ? 'text-blue-700' : 'text-gray-700'}>
                   {message.content as string}
                 </p>
               )}
@@ -123,8 +126,8 @@ const ChatArea: React.FC = () => {
       <div className="relative">
         {isLoading && (
           <div className="absolute top-0 left-0 right-0 flex justify-center">
-            <div className="bg-background/80 px-4 py-2 rounded-t-lg shadow-lg">
-              <Loader2 className="h-4 w-4 animate-spin" />
+            <div className="bg-blue-500/80 px-4 py-2 rounded-t-lg shadow-lg">
+              <Loader2 className="h-4 w-4 animate-spin text-white" />
             </div>
           </div>
         )}
