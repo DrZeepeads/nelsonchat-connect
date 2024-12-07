@@ -11,16 +11,16 @@ const Index = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full flex-col">
         <Header />
-        <Menubar className="border-t border-b">
+        <Menubar className="border-t border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <MenubarMenu>
-            <MenubarTrigger className="cursor-pointer">
+            <MenubarTrigger className="cursor-pointer hover:bg-accent/50">
               <Menu className="h-4 w-4 mr-2" />
-              Menu
+              <span className="text-sm font-medium">Menu</span>
             </MenubarTrigger>
             <MenubarContent>
               <MenubarItem className="flex flex-col items-start">
-                <span className="font-bold">Welcome to Nelsonbot</span>
-                <span className="text-sm text-muted-foreground">Your AI assistant for pediatric medicine</span>
+                <span className="font-medium">Welcome to Nelsonbot</span>
+                <span className="text-xs text-muted-foreground">Your AI assistant for pediatric medicine</span>
               </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
