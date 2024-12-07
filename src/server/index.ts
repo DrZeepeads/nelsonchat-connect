@@ -36,23 +36,32 @@ let volume2Content = '';
 
 try {
   const volume1Buffer = fs.readFileSync(path.join(volume1Dir, 'nelson_vol1.pdf'));
-  const volume2Buffer = fs.readFileSync(path.join(volume2Dir, 'nelson_vol2.pdf'));
-
-  Promise.all([
-    pdf(volume1Buffer),
-    pdf(volume2Buffer)
-  ]).then(([data1, data2]) => {
-    volume1Content = data1.text;
-    volume2Content = data2.text;
-    console.log('PDF files loaded successfully');
+  console.log('Successfully read Volume 1 PDF');
+  
+  pdf(volume1Buffer).then(data => {
+    volume1Content = data.text;
+    console.log('Successfully parsed Volume 1 PDF');
   }).catch(err => {
-    console.error('Error parsing PDF files:', err);
+    console.error('Error parsing Volume 1 PDF:', err);
   });
+
+  // Try to read Volume 2 if it exists
+  try {
+    const volume2Buffer = fs.readFileSync(path.join(volume2Dir, 'nelson_vol2.pdf'));
+    pdf(volume2Buffer).then(data => {
+      volume2Content = data.text;
+      console.log('Successfully parsed Volume 2 PDF');
+    }).catch(err => {
+      console.error('Error parsing Volume 2 PDF:', err);
+    });
+  } catch (err) {
+    console.log('Volume 2 not found yet');
+  }
 } catch (err) {
   console.error('Error reading PDF files:', err);
 }
 
-app.get('/api/search', function(req: express.Request, res: express.Response) {
+app.get('/api/search', (req, res) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
