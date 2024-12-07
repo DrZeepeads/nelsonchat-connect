@@ -10,24 +10,59 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 
-// Read and parse PDF file
-const dataBuffer = fs.readFileSync(path.join(__dirname, 'nelson.pdf'));
+// Create directories for both volumes
+const volume1Dir = path.join(__dirname, 'Nelson book of pediatrics volume 1');
+const volume2Dir = path.join(__dirname, 'Nelson book of pediatrics volume 2');
 
-let pdfContent = '';
-pdf(dataBuffer).then(data => {
-  pdfContent = data.text;
-});
+if (!fs.existsSync(volume1Dir)) {
+  fs.mkdirSync(volume1Dir, { recursive: true });
+}
 
-// Search endpoint
+if (!fs.existsSync(volume2Dir)) {
+  fs.mkdirSync(volume2Dir, { recursive: true });
+}
+
+// Read and parse PDF files
+let volume1Content = '';
+let volume2Content = '';
+
+try {
+  const volume1Buffer = fs.readFileSync(path.join(volume1Dir, 'nelson_vol1.pdf'));
+  const volume2Buffer = fs.readFileSync(path.join(volume2Dir, 'nelson_vol2.pdf'));
+
+  Promise.all([
+    pdf(volume1Buffer),
+    pdf(volume2Buffer)
+  ]).then(([data1, data2]) => {
+    volume1Content = data1.text;
+    volume2Content = data2.text;
+    console.log('PDF files loaded successfully');
+  }).catch(err => {
+    console.error('Error parsing PDF files:', err);
+  });
+} catch (err) {
+  console.error('Error reading PDF files:', err);
+}
+
 app.get('/api/search', async (req: Request, res: Response) => {
   try {
     const query = req.query.q as string;
+    const volume = req.query.volume as string;
+
     if (!query) {
       return res.status(400).json({ error: 'Query parameter is required' });
     }
 
-    // Simple search implementation
-    const sentences = pdfContent.split(/[.!?]+/);
+    let contentToSearch = '';
+    if (volume === '1') {
+      contentToSearch = volume1Content;
+    } else if (volume === '2') {
+      contentToSearch = volume2Content;
+    } else {
+      contentToSearch = volume1Content + '\n' + volume2Content;
+    }
+
+    const sentences = contentToSearch.split(/[.!?]+/);
     const results = sentences
       .filter(sentence => 
         sentence.toLowerCase().includes(query.toLowerCase())
