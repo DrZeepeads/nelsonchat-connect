@@ -4,12 +4,6 @@ import { VitePWA } from "vite-plugin-pwa";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-declare global {
-  interface Window {
-    location: Location;
-  }
-}
-
 export default defineConfig(({ mode }) => ({
   server: {
     port: 8080,
@@ -58,7 +52,7 @@ export default defineConfig(({ mode }) => ({
         runtimeCaching: [
           {
             urlPattern: ({ url }) => {
-              return typeof window !== 'undefined' && url.origin === window.location.origin;
+              return typeof window !== 'undefined' && url.origin === new URL(url.href).origin;
             },
             handler: "CacheFirst",
             options: {
