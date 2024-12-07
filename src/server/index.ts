@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
@@ -61,8 +61,8 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-// Define the search route handler
-app.get('/api/search', async (req, res) => {
+// Define the search route handler with proper type annotations
+app.get('/api/search', (req: Request, res: Response) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
