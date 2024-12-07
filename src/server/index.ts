@@ -11,7 +11,6 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 
-// Create directories using absolute paths
 const baseDir = path.resolve(__dirname, '../../');
 const volume1Dir = path.join(baseDir, 'Nelson book of pediatrics volume 1');
 const volume2Dir = path.join(baseDir, 'Nelson book of pediatrics volume 2');
@@ -22,7 +21,6 @@ console.log('Volume 1 directory:', volume1Dir);
 console.log('Volume 2 directory:', volume2Dir);
 console.log('Text files directory:', textFilesDir);
 
-// Create directories if they don't exist
 [volume1Dir, volume2Dir, textFilesDir].forEach(dir => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
@@ -30,7 +28,6 @@ console.log('Text files directory:', textFilesDir);
   }
 });
 
-// Read and parse PDF files
 let volume1Content = '';
 let volume2Content = '';
 
@@ -60,7 +57,6 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-// Define search endpoint with proper typing
 app.get('/api/search', async (req: Request, res: Response) => {
   try {
     const query = req.query.q as string;
@@ -100,8 +96,8 @@ app.get('/api/search', async (req: Request, res: Response) => {
   }
 });
 
-const server = app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-export default server;
+export default app;
