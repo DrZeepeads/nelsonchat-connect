@@ -1,12 +1,15 @@
-import { DirectionProvider } from "@radix-ui/react-direction"
-import ChatArea from "@/components/ChatArea"
-import Header from "@/components/Header"
+import { DirectionProvider } from "@radix-ui/react-direction";
+import ChatArea from "@/components/ChatArea";
+import Header from "@/components/Header";
 
 const Index = () => {
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full flex-col">
+    <DirectionProvider dir="ltr">
+      <div className="min-h-screen flex w-full flex-col bg-[#0A0F1C]">
+        {/* Header section */}
         <Header />
+
+        {/* Sidebar and Menu Bar */}
         <div className="fixed top-0 left-0 right-0 z-50">
           <div className="h-2 w-full hover-trigger" />
           <Menubar className="border-t border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out transform -translate-y-full group-hover/menu:translate-y-0 hover:translate-y-0 w-full shadow-md">
@@ -37,15 +40,15 @@ const Index = () => {
               </MenubarContent>
             </MenubarMenu>
           </Menubar>
-    <DirectionProvider dir="ltr">
-      <div className="min-h-screen flex w-full flex-col bg-[#0A0F1C]">
-        <Header />
+        </div>
+
+        {/* Chat Area */}
         <div className="flex flex-1">
           <ChatArea />
         </div>
       </div>
     </DirectionProvider>
-  )
-}
+  );
+};
 
-export default Index
+export default Index;
