@@ -4,7 +4,6 @@ import Header from "@/components/Header"
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger, MenubarSeparator } from "@/components/ui/menubar"
 import { Menu, LogIn, UserPlus, History, Home } from "lucide-react"
 import { SearchBox } from "@/components/SearchBox"
-import FileUpload from "@/components/FileUpload"
 import ChatArea from "@/components/ChatArea"
 
 const Index = () => {
@@ -45,7 +44,6 @@ const Index = () => {
         </div>
         <div className="p-4 space-y-4">
           <SearchBox />
-          <FileUpload />
         </div>
         <div className="flex flex-1">
           <AppSidebar />
