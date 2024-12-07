@@ -45,7 +45,6 @@ try {
     console.error('Error parsing Volume 1 PDF:', err);
   });
 
-  // Try to read Volume 2 if it exists
   try {
     const volume2Buffer = fs.readFileSync(path.join(volume2Dir, 'nelson_vol2.pdf'));
     pdf(volume2Buffer).then(data => {
@@ -80,7 +79,6 @@ app.get('/api/search', async (req: Request, res: Response) => {
       contentToSearch = volume1Content + '\n' + volume2Content;
     }
 
-    // Implement search logic
     const sentences = contentToSearch.split(/[.!?]+/);
     const results = sentences
       .filter(sentence => 
@@ -102,7 +100,6 @@ app.get('/api/search', async (req: Request, res: Response) => {
   }
 });
 
-// Start the server
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
