@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
@@ -50,7 +50,7 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-app.get('/api/search', (req: Request, res: Response) => {
+app.get('/api/search', (req, res) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
