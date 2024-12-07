@@ -61,7 +61,8 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-app.get('/api/search', async function searchHandler(req: express.Request, res: express.Response) {
+// Define the search route handler
+app.get('/api/search', async (req, res) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
