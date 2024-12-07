@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
@@ -44,7 +44,8 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-app.get('/api/search', async (req, res) => {
+// Define search endpoint with proper typing
+app.get('/api/search', async (req: Request, res: Response) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
@@ -62,6 +63,7 @@ app.get('/api/search', async (req, res) => {
       contentToSearch = volume1Content + '\n' + volume2Content;
     }
 
+    // Implement search logic
     const sentences = contentToSearch.split(/[.!?]+/);
     const results = sentences
       .filter(sentence => 
@@ -83,6 +85,9 @@ app.get('/api/search', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+// Start the server
+const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+export default server;
