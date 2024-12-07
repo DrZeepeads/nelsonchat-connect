@@ -11,25 +11,24 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 
-// Create directories for both volumes using absolute paths
+// Create directories using absolute paths
 const baseDir = path.resolve(__dirname, '../../');
 const volume1Dir = path.join(baseDir, 'Nelson book of pediatrics volume 1');
 const volume2Dir = path.join(baseDir, 'Nelson book of pediatrics volume 2');
+const textFilesDir = path.join(__dirname, 'text-files');
 
 console.log('Base directory:', baseDir);
 console.log('Volume 1 directory:', volume1Dir);
 console.log('Volume 2 directory:', volume2Dir);
+console.log('Text files directory:', textFilesDir);
 
 // Create directories if they don't exist
-if (!fs.existsSync(volume1Dir)) {
-  fs.mkdirSync(volume1Dir, { recursive: true });
-  console.log('Created Volume 1 directory');
-}
-
-if (!fs.existsSync(volume2Dir)) {
-  fs.mkdirSync(volume2Dir, { recursive: true });
-  console.log('Created Volume 2 directory');
-}
+[volume1Dir, volume2Dir, textFilesDir].forEach(dir => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+    console.log(`Created directory: ${dir}`);
+  }
+});
 
 // Read and parse PDF files
 let volume1Content = '';
@@ -53,8 +52,7 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-// Search endpoint
-app.get('/api/search', async (req: express.Request, res: express.Response) => {
+app.get('/api/search', async (req, res) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
