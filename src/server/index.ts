@@ -62,7 +62,7 @@ try {
 }
 
 // Define the search route handler with proper type annotations
-app.get('/api/search', (req: Request, res: Response) => {
+const searchHandler = async (req: Request, res: Response) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
@@ -99,7 +99,10 @@ app.get('/api/search', (req: Request, res: Response) => {
     console.error('Search error:', error);
     return res.status(500).json({ error: 'Internal server error' } as SearchError);
   }
-});
+};
+
+// Register the route handler
+app.get('/api/search', searchHandler);
 
 if (require.main === module) {
   app.listen(PORT, () => {
