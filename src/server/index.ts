@@ -104,10 +104,12 @@ const searchHandler = async (req: Request, res: Response) => {
 // Register the route handler
 app.get('/api/search', searchHandler);
 
+// Start the server if this file is run directly
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 }
 
+// Export the app for testing or external use
 export default app;
