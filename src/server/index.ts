@@ -11,7 +11,6 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 
-// Create directories using absolute paths
 const baseDir = path.resolve(__dirname, '../../');
 const volume1Dir = path.join(baseDir, 'Nelson book of pediatrics volume 1');
 const volume2Dir = path.join(baseDir, 'Nelson book of pediatrics volume 2');
@@ -22,7 +21,6 @@ console.log('Volume 1 directory:', volume1Dir);
 console.log('Volume 2 directory:', volume2Dir);
 console.log('Text files directory:', textFilesDir);
 
-// Create directories if they don't exist
 [volume1Dir, volume2Dir, textFilesDir].forEach(dir => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
@@ -30,7 +28,6 @@ console.log('Text files directory:', textFilesDir);
   }
 });
 
-// Read and parse PDF files
 let volume1Content = '';
 let volume2Content = '';
 
@@ -45,7 +42,6 @@ try {
     console.error('Error parsing Volume 1 PDF:', err);
   });
 
-  // Try to read Volume 2 if it exists
   try {
     const volume2Buffer = fs.readFileSync(path.join(volume2Dir, 'nelson_vol2.pdf'));
     pdf(volume2Buffer).then(data => {
@@ -61,11 +57,7 @@ try {
   console.error('Error reading PDF files:', err);
 }
 
-// Define search endpoint with proper typing
 app.get('/api/search', async (req: Request, res: Response) => {
-app.get('/api/search', (req: express.Request, res: express.Response) => {
-// Define the search route handler with proper type annotations
-const searchHandler = async (req: Request, res: Response) => {
   try {
     const query = req.query.q as string;
     const volume = req.query.volume as string;
@@ -83,7 +75,6 @@ const searchHandler = async (req: Request, res: Response) => {
       contentToSearch = volume1Content + '\n' + volume2Content;
     }
 
-    // Implement search logic
     const sentences = contentToSearch.split(/[.!?]+/);
     const results = sentences
       .filter(sentence => 
@@ -103,24 +94,10 @@ const searchHandler = async (req: Request, res: Response) => {
     console.error('Search error:', error);
     return res.status(500).json({ error: 'Internal server error' } as SearchError);
   }
-};
+});
 
-// Register the route handler
-app.get('/api/search', searchHandler);
-
-// Start the server
-const server = app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-export default server;
-// Start the server if this file is run directly
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
-
-export default app;
-// Export the app for testing or external use
 export default app;

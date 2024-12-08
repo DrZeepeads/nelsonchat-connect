@@ -7,8 +7,12 @@ const Home: React.FC = () => (
   <div className="min-h-screen flex flex-col">
     <Header />
     <div className="flex-grow flex">
-      <AppSidebar />
-      <ChatArea />
+      <aside className="w-64">
+        <AppSidebar />
+      </aside>
+      <main className="flex-grow">
+        <ChatArea />
+      </main>
     </div>
   </div>
 );

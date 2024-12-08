@@ -11,6 +11,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
  * @throws Error if the request fails or the API returns an error.
  */
 export async function searchNelson(query: string, volume?: string): Promise<SearchResponse> {
+<<<<<<< main
   try {
     const params = new URLSearchParams({
       q: query,
@@ -26,6 +27,16 @@ export async function searchNelson(query: string, volume?: string): Promise<Sear
 
     clearTimeout(timeout);
 
+=======
+  const params = new URLSearchParams({ q: query });
+  if (volume) {
+    params.append('volume', volume);
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/api/search?${params}`);
+    
+>>>>>>> origin/main
     if (!response.ok) {
       const errorData = (await response.json()) as SearchError;
       throw new Error(errorData.error || `HTTP Error: ${response.status}`);
@@ -39,9 +50,24 @@ export async function searchNelson(query: string, volume?: string): Promise<Sear
       throw new Error('Search request timed out. Please try again.');
     }
 
+<<<<<<< main
     console.error('Search API error:', error);
     throw new Error(
       error instanceof Error ? error.message : 'An unexpected error occurred.'
     );
+=======
+    return await response.json() as SearchResponse;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Search API error:', {
+        message: error.message,
+        query,
+        volume,
+      });
+    } else {
+      console.error('Unknown error occurred during search');
+    }
+    throw error;
+>>>>>>> origin/main
   }
 }

@@ -1,30 +1,33 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
+    /* Target and Compatibility */
+    "target": "ES2020", // Use ES2020 features
+    "useDefineForClassFields": true, // Use `define` semantics for class fields
+    "lib": ["ES2020", "DOM", "DOM.Iterable"], // Include DOM and ES2020 libraries
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-    "jsx": "react-jsx",
+    /* Module and Resolution */
+    "module": "ESNext", // Use the latest ES module standard
+    "moduleResolution": "bundler", // Use bundler-compatible module resolution
+    "allowImportingTsExtensions": true, // Allow `.ts` extensions in imports
+    "isolatedModules": true, // Treat each file as a module
+    "moduleDetection": "force", // Enforce module imports/exports
+    "noEmit": true, // Do not emit output files
+    "jsx": "react-jsx", // Use React JSX transform
 
-    /* Linting */
-    "strict": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitAny": false,
-    "noFallthroughCasesInSwitch": false,
+    /* Type Checking */
+    "skipLibCheck": true, // Skip checking library files for performance
+    "strict": false, // Disable all strict type-checking options
+    "noUnusedLocals": false, // Allow unused local variables
+    "noUnusedParameters": false, // Allow unused parameters
+    "noImplicitAny": false, // Allow implicit `any` types
+    "noFallthroughCasesInSwitch": false, // Allow fallthrough cases in switch statements
 
-    "baseUrl": ".",
+    /* Paths and Aliases */
+    "baseUrl": ".", // Base URL for resolving paths
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"] // Alias for cleaner imports
     }
   },
+  /* Files to Include */
   "include": ["src"]
 }
