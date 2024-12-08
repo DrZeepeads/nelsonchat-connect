@@ -1,4 +1,6 @@
 # Welcome to your Lovable project
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDrZeepeads%2Fnelsonchat-connect.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FDrZeepeads%2Fnelsonchat-connect?ref=badge_shield)
+
 
 ## Project info
 
@@ -67,3 +69,7 @@ Simply open [Lovable](https://lovable.dev/projects/2142c590-08dd-4bc3-a987-32780
 ## I want to use a custom domain - is that possible?
 
 We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDrZeepeads%2Fnelsonchat-connect.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FDrZeepeads%2Fnelsonchat-connect?ref=badge_large)
