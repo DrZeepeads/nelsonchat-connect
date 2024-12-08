@@ -3,12 +3,10 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// Import for the correct type of 'window.location' in the global context
-// Move this to a separate file like Vite.env.d.ts for better separation
-
 export default defineConfig({
   plugins: [
     react(),
+    // Progressive Web App Configuration
     VitePWA({
       registerType: 'autoUpdate', // Automatically update the service worker
       includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
@@ -30,16 +28,21 @@ export default defineConfig({
           }
         ]
       },
-      // Optional service worker config to enable offline caching
       workbox: {
         runtimeCaching: [
           {
+            // Cache-first strategy for images
             urlPattern: ({ request }) => request.destination === 'image',
             handler: 'CacheFirst',
             options: {
               cacheName: 'images',
-              expiration: { maxEntries: 50 },
-              cacheableResponse: { statuses: [0, 200] }
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 7 // 1 week
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
             }
           }
         ]
@@ -48,7 +51,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': path.resolve(__dirname, './src') // Simplify imports with `@`
     }
   },
   server: {
@@ -56,12 +59,12 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3001',
         changeOrigin: true,
-        secure: false, // Disable SSL for localhost (set to true in production)
-        rewrite: (path) => path.replace(/^\/api/, '') // Optional: Rewrite path to avoid API duplication
+        secure: false, // Disable SSL for localhost; enable in production
+        rewrite: (path) => path.replace(/^\/api/, '') // Remove `/api` prefix in requests
       }
     }
   },
   define: {
-    'process.env': process.env // Ensure environment variables are available
+    'process.env': { ...process.env } // Spread environment variables for future-proofing
   }
 });
