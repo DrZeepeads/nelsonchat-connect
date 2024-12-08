@@ -1,17 +1,17 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "default",
-  "rsc": false,
-  "tsx": true,
+  "style": "default", // Uses ShadCN default styling
+  "rsc": false, // React Server Components disabled, set to true for Next.js RSC
+  "tsx": true, // Enables TypeScript with JSX support
   "tailwind": {
-    "config": "tailwind.config.ts",
-    "css": "src/index.css",
-    "baseColor": "slate",
-    "cssVariables": true,
-    "prefix": ""
+    "config": "tailwind.config.ts", // Tailwind's configuration file
+    "css": "src/index.css", // Tailwind's main CSS file
+    "baseColor": "slate", // Default base color palette (can be changed)
+    "cssVariables": true, // Enables CSS variables for Tailwind
+    "prefix": "" // No prefix added to utility classes
   },
   "aliases": {
-    "components": "@/components",
+    "components": "@/components", // Aliases for easier imports
     "utils": "@/lib/utils",
     "ui": "@/components/ui",
     "lib": "@/lib",
