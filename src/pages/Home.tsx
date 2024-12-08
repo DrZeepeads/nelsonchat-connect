@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
-import AppSidebar from "../components/AppSidebar";
+import { AppSidebar } from "../components/AppSidebar";
 import ChatArea from "../components/ChatArea";
 
 const Home: React.FC = () => (

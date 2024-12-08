@@ -105,37 +105,3 @@
   }
 >>>>>>> origin/main
 }
-
-.read-the-docs:hover {
-  color: #646cff;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  #root {
-    padding: 2rem;
-  }
-
-  .logo {
-    height: 5em;
-    padding: 1rem;
-  }
-
-  .card {
-    padding: 1.5em;
-  }
-}
-
-@media (max-width: 480px) {
-  #root {
-    padding: 1rem;
-  }
-
-  .logo {
-    height: 4em;
-  }
-
-  .card {
-    padding: 1rem;
-  }
-}
