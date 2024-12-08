@@ -7,7 +7,7 @@ import tseslint from "typescript-eslint";
 export default tseslint.config(
   {
     // Ignore files or directories
-    ignores: ["dist", "node_modules", "*.config.js"], 
+    ignores: ["dist", "node_modules", "*.config.js"],
   },
   {
     // Extend recommended configurations
@@ -19,7 +19,10 @@ export default tseslint.config(
     languageOptions: {
       ecmaVersion: 2022, // Latest ECMAScript features (optional chaining, nullish coalescing)
       sourceType: "module", // Support ES Modules
-      globals: globals.browser, // Use browser-specific global variables
+      globals: {
+        ...globals.browser, // Use browser-specific global variables
+        serviceWorker: true, // Add service worker globals
+      },
     },
     plugins: {
       "react-hooks": reactHooks,
@@ -39,6 +42,13 @@ export default tseslint.config(
       "no-debugger": "error", // Disallow debugger statements
       "eqeqeq": ["error", "always"], // Enforce strict equality
       "curly": ["error", "all"], // Require braces for all control statements
+      "no-restricted-globals": [
+        "error",
+        {
+          name: "self",
+          message: "Use 'self' carefully in service workers to avoid scope issues.",
+        },
+      ],
     },
   }
 );
