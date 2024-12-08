@@ -6,22 +6,22 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    // Ignore files or directories
-    ignores: ["dist", "node_modules", "*.config.js"],
+    ignores: ["dist", "node_modules", "*.config.js", "*.test.js"], // Added test files to ignores
   },
   {
-    // Extend recommended configurations
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,
     ],
-    files: ["**/*.{ts,tsx}"], // Apply rules to TypeScript files
+    files: ["**/*.{ts,tsx}"],
     languageOptions: {
-      ecmaVersion: 2022, // Latest ECMAScript features (optional chaining, nullish coalescing)
-      sourceType: "module", // Support ES Modules
+      ecmaVersion: 2022,
+      sourceType: "module",
       globals: {
-        ...globals.browser, // Use browser-specific global variables
-        serviceWorker: true, // Add service worker globals
+        ...globals.browser,
+        serviceWorker: true,
+        process: true, // Add Node.js process global
+        module: true, // Add Node.js module global
       },
     },
     plugins: {
@@ -29,19 +29,22 @@ export default tseslint.config(
       "react-refresh": reactRefresh,
     },
     rules: {
-      ...reactHooks.configs.recommended.rules, // React Hooks rules
+      ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": [
-        "warn", // Warn for invalid component exports in Fast Refresh
+        "warn",
         { allowConstantExport: true },
       ],
       "@typescript-eslint/no-unused-vars": [
-        "warn", // Enable unused variable checks with warnings
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }, // Allow unused variables prefixed with "_"
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
-      "no-console": "warn", // Warn for console.log (useful in production-ready code)
-      "no-debugger": "error", // Disallow debugger statements
-      "eqeqeq": ["error", "always"], // Enforce strict equality
-      "curly": ["error", "all"], // Require braces for all control statements
+      "no-console": [
+        "warn",
+        { allow: ["warn", "error"] }, // Allow console.warn and console.error
+      ],
+      "no-debugger": "error",
+      "eqeqeq": ["error", "always"],
+      "curly": ["error", "all"],
       "no-restricted-globals": [
         "error",
         {
@@ -49,6 +52,9 @@ export default tseslint.config(
           message: "Use 'self' carefully in service workers to avoid scope issues.",
         },
       ],
+      "no-var": "error", // Enforce let/const instead of var
+      "prefer-const": "warn", // Suggest using const where possible
+      "arrow-body-style": ["warn", "as-needed"], // Enforce concise arrow function bodies
     },
   }
 );
