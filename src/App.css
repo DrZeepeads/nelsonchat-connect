@@ -67,8 +67,6 @@
   margin-top: 1em;
   display: block;
   transition: color 300ms ease;
-<<<<<<< main
-=======
 }
 
 .read-the-docs:hover {
@@ -103,5 +101,4 @@
   .card {
     padding: 1rem;
   }
->>>>>>> origin/main
 }
