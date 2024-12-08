@@ -16,15 +16,19 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  // Load search history from localStorage
+  // Load search history safely from localStorage
   useEffect(() => {
-    const savedHistory = localStorage.getItem("searchHistory");
-    if (savedHistory) {
-      setSearchHistory(JSON.parse(savedHistory));
+    try {
+      const savedHistory = localStorage.getItem("searchHistory");
+      if (savedHistory) {
+        setSearchHistory(JSON.parse(savedHistory) || []);
+      }
+    } catch (error) {
+      console.error("Error loading search history:", error);
     }
   }, []);
 
-  // Update suggestions dynamically when typing /search
+  // Update suggestions dynamically based on user input
   useEffect(() => {
     if (message.startsWith("/search ")) {
       const searchTerm = message.substring(8).toLowerCase();
@@ -37,6 +41,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled }) => {
     }
   }, [message, searchHistory]);
 
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -56,7 +61,12 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled }) => {
           ...searchHistory.filter((item) => item !== searchTerm),
         ].slice(0, 10);
         setSearchHistory(updatedHistory);
-        localStorage.setItem("searchHistory", JSON.stringify(updatedHistory));
+
+        try {
+          localStorage.setItem("searchHistory", JSON.stringify(updatedHistory));
+        } catch (error) {
+          console.error("Error saving search history:", error);
+        }
       }
     }
 
@@ -65,33 +75,47 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled }) => {
     setSuggestions([]);
   };
 
+  // Handle suggestion click
   const handleSuggestionClick = (suggestion: string) => {
     setMessage(`/search ${suggestion}`);
     setSuggestions([]);
     inputRef.current?.focus();
   };
 
+  // Suggestion List Component
+  const SuggestionsDropdown: React.FC = () => {
+    if (suggestions.length === 0) return null;
+
+    return (
+      <div
+        className="absolute bottom-full left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-lg mb-2 z-10"
+        role="listbox"
+        aria-label="Search suggestions"
+      >
+        {suggestions.map((suggestion, index) => (
+          <button
+            key={index}
+            className="w-full text-left px-4 py-2 hover:bg-gray-100 transition"
+            onClick={() => handleSuggestionClick(suggestion)}
+            role="option"
+          >
+            {suggestion}
+          </button>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="relative">
       {/* Suggestions Dropdown */}
-      {suggestions.length > 0 && (
-        <div className="absolute bottom-full left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-lg mb-2 z-10">
-          {suggestions.map((suggestion, index) => (
-            <button
-              key={index}
-              className="w-full text-left px-4 py-2 hover:bg-gray-100 transition"
-              onClick={() => handleSuggestionClick(suggestion)}
-            >
-              {suggestion}
-            </button>
-          ))}
-        </div>
-      )}
+      <SuggestionsDropdown />
 
       {/* Chat Input Form */}
       <form
         onSubmit={handleSubmit}
         className="w-full flex items-center gap-2 p-4 bg-white border-t border-gray-300"
+        aria-label="Chat input form"
       >
         <Input
           ref={inputRef}
@@ -101,11 +125,13 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled }) => {
           placeholder="Type a message or /search for textbook..."
           className="flex-grow text-sm rounded-full bg-gray-100 focus:bg-white focus:ring-2 focus:ring-blue-500"
           disabled={disabled}
+          aria-label="Chat input"
         />
         <Button
           type="submit"
           className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white transition disabled:bg-gray-300"
           disabled={disabled}
+          aria-label={disabled ? "Sending..." : "Send message"}
         >
           {disabled ? (
             <Loader2 className="h-5 w-5 animate-spin" />
