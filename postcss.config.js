@@ -6,14 +6,13 @@ export default {
     // Autoprefixer for adding vendor prefixes automatically
     autoprefixer: {},
 
-    // Optional: Add other plugins if needed, such as PurgeCSS or postcss-nested
-    /*
+    // Conditional PurgeCSS plugin for production to remove unused CSS
     ...(process.env.NODE_ENV === 'production' && {
-      'postcss-purgecss': {
-        content: ['./src/**/*.{js,jsx,ts,tsx,html}', './public/index.html'],
-        defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
+      '@fullhuman/postcss-purgecss': {
+        content: ['./src/**/*.{js,jsx,ts,tsx,html}', './public/index.html'], // Files to scan for class usage
+        defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [], // CSS class extraction
+        safelist: ['html', 'body'], // Prevent purging of key elements
       },
     }),
-    */
   },
 };
