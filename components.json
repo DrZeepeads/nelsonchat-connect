@@ -1,20 +1,32 @@
-{
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "default", // Uses ShadCN default styling
-  "rsc": false, // React Server Components disabled, set to true for Next.js RSC
-  "tsx": true, // Enables TypeScript with JSX support
-  "tailwind": {
-    "config": "tailwind.config.ts", // Tailwind's configuration file
-    "css": "src/index.css", // Tailwind's main CSS file
-    "baseColor": "slate", // Default base color palette (can be changed)
-    "cssVariables": true, // Enables CSS variables for Tailwind
-    "prefix": "" // No prefix added to utility classes
+// Configuration for a ShadCN project with Tailwind CSS and TypeScript
+
+module.exports = {
+  $schema: "https://ui.shadcn.com/schema.json", // Schema for validation and tooling support
+
+  // Styling configuration
+  style: "default", // Use ShadCN's default styling
+
+  // React Server Components configuration
+  rsc: false, // Set to true if using React Server Components with Next.js
+
+  // TypeScript and JSX support
+  tsx: true, // Enable TypeScript with JSX
+
+  // Tailwind CSS configuration
+  tailwind: {
+    config: "tailwind.config.ts", // Path to Tailwind's configuration file
+    css: "src/index.css", // Path to the main CSS file for Tailwind
+    baseColor: "slate", // Default base color palette, customize as needed
+    cssVariables: true, // Enable CSS variables for dynamic theming
+    prefix: "", // No prefix added to Tailwind utility classes
   },
-  "aliases": {
-    "components": "@/components", // Aliases for easier imports
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
-  }
-}
+
+  // Module aliases for easier imports
+  aliases: {
+    components: "@/components", // Alias for components directory
+    utils: "@/lib/utils", // Alias for utility functions
+    ui: "@/components/ui", // Alias for UI components
+    lib: "@/lib", // Alias for library code
+    hooks: "@/hooks", // Alias for custom hooks
+  },
+};
