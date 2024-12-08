@@ -4,16 +4,22 @@
   "description": "NelsonBot - Your smart assistant for pediatrics.",
   "main": "index.js",
   "scripts": {
-    "start": "vite", // For development
-    "build": "vite build", // For production build
-    "preview": "vite preview", // For previewing production build
-    "lint": "eslint .", // Linting files
-    "format": "prettier --write .", // Code formatting
-    "test": "vitest", // Testing
-    "type-check": "tsc --noEmit", // TypeScript type checking
-    "prepare": "husky install" // Hooks for pre-commit validations
+    "start": "vite",
+    "dev": "vite", // Added alias for development
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "test": "vitest",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky install"
   },
-  "keywords": ["pediatrics", "AI assistant", "medical knowledge", "Nelson textbook"],
+  "keywords": [
+    "pediatrics",
+    "AI assistant",
+    "medical knowledge",
+    "Nelson textbook"
+  ],
   "author": "NelsonBot Team",
   "license": "MIT",
   "dependencies": {
@@ -42,7 +48,9 @@
     "typescript": "^5.2.0",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-tailwind-purgecss": "^2.0.0",
-    "vitest": "^0.35.0"
+    "vitest": "^0.35.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.0"
   },
   "engines": {
     "node": ">=16.0.0",
