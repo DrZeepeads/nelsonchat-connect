@@ -5,35 +5,15 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "target": "ESNext", // Modern JavaScript features
-    "module": "ESNext", // Use ES Modules for better tree-shaking
-    "moduleResolution": "Node", // Resolves modules in Node.js style
-    "baseUrl": ".", // Base path for module resolution
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"] // Simplified path alias for imports
+      "@/*": ["./src/*"]
     },
-    "lib": ["DOM", "DOM.Iterable", "ESNext"], // Includes modern browser APIs
-    "allowJs": true, // Allows importing JS files
-    "checkJs": false, // Skips type-checking for JS files
-    "skipLibCheck": true, // Speeds up compilation by skipping library checks
-    "esModuleInterop": true, // Ensures compatibility with CommonJS modules
-    "resolveJsonModule": true, // Allows importing JSON files
-    "strict": true, // Enables all strict type-checking options
-    "forceConsistentCasingInFileNames": true, // Avoids filename casing issues
-    "noImplicitAny": true, // Ensures all variables have explicit types
-    "strictNullChecks": true, // Ensures null and undefined are handled explicitly
-    "noUnusedLocals": true, // Reports unused local variables
-    "noUnusedParameters": true, // Reports unused function parameters
-    "noImplicitReturns": true, // Ensures all code paths return a value
-    "noFallthroughCasesInSwitch": true, // Avoids unintended fallthrough in switch cases
-    "useDefineForClassFields": true, // Uses modern class field behavior
-    "incremental": true, // Enables incremental compilation for faster rebuilds
-    "tsBuildInfoFile": "./.tsbuildinfo" // Stores incremental build info
-  },
-  "include": ["src/**/*"], // Includes all source files
-  "exclude": ["node_modules", "dist", "build"], // Excludes common output folders
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+    "noImplicitAny": false,
+    "noUnusedParameters": false,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "noUnusedLocals": false,
+    "strictNullChecks": false
+  }
 }

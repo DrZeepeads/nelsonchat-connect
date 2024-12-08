@@ -5,33 +5,30 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
-  // Server configuration for development
   server: {
-    port: 8080, // Development server will run on port 8080
-    host: "::", // Allow binding to IPv6 and IPv4
+    port: 8080,
+    host: "::",
     proxy: {
-      "/api": {
-        target: "http://localhost:3000", // Redirect API calls to backend
+      '/api': {
+        target: 'http://localhost:3000',
         changeOrigin: true,
       },
     },
   },
-
-  // Plugins for Vite
   plugins: [
-    react(), // Enable React support with JSX
-    mode === "development" && componentTagger(), // Enable component tagging only in development
+    react(),
+    mode === 'development' && componentTagger(),
     VitePWA({
-      registerType: "autoUpdate", // Automatically update the service worker
+      registerType: "autoUpdate",
       devOptions: {
-        enabled: true, // Enable PWA during development
+        enabled: true,
       },
       manifest: {
         name: "Nelsonbot",
         short_name: "Nelsonbot",
         description: "AI-powered chat assistant for pediatricians and students.",
-        theme_color: "#1E40AF", // Theme color for the PWA
-        background_color: "#ffffff", // Background color for the splash screen
+        theme_color: "#1E40AF",
+        background_color: "#ffffff",
         icons: [
           {
             src: "/icon-192x192.png",
@@ -55,38 +52,30 @@ export default defineConfig(({ mode }) => ({
         runtimeCaching: [
           {
             urlPattern: ({ url }) => {
-              return url.origin === self.location.origin; // Cache resources from the same origin
+              return url.origin === new URL(url.href).origin;
             },
-            handler: "CacheFirst", // Serve static resources from the cache
+            handler: "CacheFirst",
             options: {
               cacheName: "static-resources",
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 30 * 24 * 60 * 60, // Cache for 30 days
-              },
+              expiration: { maxEntries: 50, maxAgeSeconds: 30 * 24 * 60 * 60 },
             },
           },
           {
-            urlPattern: /^https:\/\/api\.telegram\.org\//, // Cache requests to Telegram API
-            handler: "NetworkFirst", // Try network first, fallback to cache
+            urlPattern: /^https:\/\/api\.telegram\.org\//,
+            handler: "NetworkFirst",
             options: {
               cacheName: "api-cache",
-              networkTimeoutSeconds: 10, // Timeout after 10 seconds
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 7 * 24 * 60 * 60, // Cache for 7 days
-              },
+              networkTimeoutSeconds: 10,
+              expiration: { maxEntries: 50, maxAgeSeconds: 7 * 24 * 60 * 60 },
             },
           },
         ],
       },
     }),
-  ].filter(Boolean), // Remove `false` values from the plugin array
-
-  // Resolve module aliases
+  ].filter(Boolean),
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"), // Shortcut to `src` directory
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 }));

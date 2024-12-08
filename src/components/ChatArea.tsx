@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import ChatInput from "./ChatInput";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
-import { searchNelson } from "@/utils/api"; // Assuming you have this function in your api utils
 
 interface SearchResult {
   text: string;
@@ -47,36 +46,15 @@ const ChatArea: React.FC = () => {
     setMessages((prev) => [...prev, newMessage]);
     setIsLoading(true);
 
-    try {
-      if (message.startsWith("/search ")) {
-        const query = message.slice(8).trim();
-        const results = await searchNelson(query);
-        const searchMessage: Message = {
-          type: "search",
-          content: results,
-          timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, searchMessage]);
-      } else {
-        // Here you would typically call your AI service
-        // For now, we'll just echo the message
-        const botMessage: Message = {
-          type: "bot",
-          content: `You asked: "${message}". This is a placeholder response. In the future, this will be processed by an AI.`,
-          timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, botMessage]);
-      }
-    } catch (error) {
-      const errorMessage: Message = {
+    setTimeout(() => {
+      const botMessage: Message = {
         type: "bot",
-        content: "Sorry, an error occurred while processing your request. Please try again.",
+        content: `You asked: "${message}". This is a placeholder response. Please wait for AI integration!`,
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
+      setMessages((prev) => [...prev, botMessage]);
       setIsLoading(false);
-    }
+    }, 1500);
   };
 
   return (
