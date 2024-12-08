@@ -1,22 +1,25 @@
+import React, { Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import React, { Suspense } from "react";
-import ErrorBoundary from "./components/ErrorBoundary";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 const ErrorFallback = ({ error }: { error: Error }) => (
-  <div role="alert">
-    <p>Something went wrong: {error.message}</p>
+  <div role="alert" className="p-4 text-red-500">
+    <h2 className="text-lg font-semibold">Something went wrong</h2>
+    <p>{error.message}</p>
   </div>
 );
 
-const Index = React.lazy(() => import("./pages/Index"));
-const Home = React.lazy(() => import("./pages/Home"));
+// Lazy-loaded components for code splitting
+const Index = React.lazy(() => import("@/pages/Index"));
+const Home = React.lazy(() => import("@/pages/Home"));
 
+// Create a React Query client
 const queryClient = new QueryClient();
 
 const App: React.FC = () => (
@@ -28,7 +31,7 @@ const App: React.FC = () => (
           <div className="flex min-h-screen w-full">
             <AppSidebar />
             <main className="flex-1">
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<div className="text-center p-4">Loading...</div>}>
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
                   <BrowserRouter>
                     <Routes>
