@@ -4,51 +4,41 @@
 
 @layer base {
   :root {
+    /* Core Colors */
     --background-light: 0 0% 100%;
     --foreground-dark: 222.2 84% 4.9%;
     --foreground-light: 210 40% 98%;
-    
-    --card-bg: var(--background-light);
-    --card-foreground: var(--foreground-dark);
-    
-    --primary-bg: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    
-    --secondary-bg: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    
-    --accent-bg: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    
-    --muted-bg: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    
-    --destructive-bg: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-light: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-dark: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --muted: 215.4 16.3% 46.9%;
+
+    --destructive: 0 84.2% 60.2%;
+
     --border: 214.3 31.8% 91.4%;
-    --input-bg: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
-    
+
+    /* Layout Variables */
     --radius: 0.5rem;
 
+    /* Sidebar Theme */
     --sidebar-bg-light: 0 0% 98%;
     --sidebar-bg-dark: 240 5.9% 10%;
-    
+
     --sidebar-foreground-light: 240 5.3% 26.1%;
     --sidebar-foreground-dark: 240 4.8% 95.9%;
-    
-    --sidebar-primary-bg-light: 240 5.9% 10%;
-    --sidebar-primary-bg-dark: 224.3 76.3% 48%;
-    
-    --sidebar-primary-foreground-light: 0 0% 98%;
-    --sidebar-primary-foreground-dark: 0 0% 100%;
-    
-    --sidebar-accent-light: 240 4.8% 95.9%;
-    --sidebar-accent-dark: 240 3.7% 15.9%;
+
+    --sidebar-primary-light: 240 5.9% 10%;
+    --sidebar-primary-dark: 224.3 76.3% 48%;
   }
 
-  /* Dark Mode Colors */
+  /* Dark Mode Overrides */
   .dark {
     --background: var(--foreground-dark);
     --foreground: var(--foreground-light);
@@ -56,33 +46,19 @@
     --card-bg: var(--foreground-dark);
     --card-foreground: var(--foreground-light);
 
-    --primary-bg: var(--primary-foreground);
-    --primary-foreground: var(--primary-bg);
-    
-    --secondary-bg: var(--secondary-bg);
-    --secondary-foreground: var(--secondary-foreground);
-    
-    --muted-bg: var(--muted-bg);
-    --muted-foreground: var(--muted-foreground);
-    
-    --accent-bg: var(--accent-bg);
-    --accent-foreground: var(--accent-foreground);
-    
-    --destructive-bg: var(--destructive-bg);
-    --destructive-foreground: var(--destructive-foreground);
-    
-    --border: var(--secondary-bg);
-    --input-bg: var(--secondary-bg);
+    --primary: var(--primary-light);
+    --secondary: var(--secondary-dark);
+
+    --border: var(--secondary);
+    --input: var(--secondary);
+
     --ring: 212.7 26.8% 83.9%;
-    
-    --sidebar-background: var(--sidebar-bg-dark);
+
+    --sidebar-bg: var(--sidebar-bg-dark);
     --sidebar-foreground: var(--sidebar-foreground-dark);
-    
-    --sidebar-primary-bg: var(--sidebar-primary-bg-dark);
-    --sidebar-primary-foreground: var(--sidebar-primary-foreground-dark);
-    
-    --sidebar-accent: var(--sidebar-accent-dark);
-    --sidebar-accent-foreground: var(--sidebar-accent-dark);
+
+    --sidebar-primary-bg: var(--sidebar-primary-dark);
+    --sidebar-primary-foreground: var(--primary-light);
   }
 }
 
@@ -94,12 +70,11 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: system-ui, sans-serif; /* Apply a clean font */
+    font-family: system-ui, sans-serif;
   }
 
   a {
-    @apply text-primary-foreground;
-    transition: color 0.3s ease;
+    @apply text-primary-light transition-colors duration-300;
   }
 
   a:hover {
@@ -108,28 +83,32 @@
 }
 
 @layer utilities {
-  /* Hover trigger: for elements that reveal content on hover */
-  .hover-trigger {
-    @apply invisible;
-    transition: transform 0.3s ease;
+  /* Utility Classes */
+  .hover-reveal {
+    @apply invisible opacity-0 transition-all duration-300 ease-in-out;
   }
 
-  .hover-trigger:hover + * {
-    @apply translate-y-0 opacity-100; /* Smooth transition for visibility */
+  .hover-reveal:hover + * {
+    @apply translate-y-0 opacity-100;
   }
 
-  /* Flexbox Utility for alignment */
   .flex-center {
     @apply flex justify-center items-center;
   }
 
-  /* Custom Border Radius */
   .rounded-sm {
     @apply rounded-[0.25rem];
   }
 
-  /* Box Shadow Utility */
   .shadow-card {
-    @apply shadow-md;
+    @apply shadow-md bg-card-bg text-card-foreground rounded-lg;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-light px-4 py-2 rounded-md hover:bg-primary-light hover:text-primary;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-dark px-4 py-2 rounded-md hover:bg-secondary-dark hover:text-secondary;
   }
 }
