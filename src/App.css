@@ -73,7 +73,7 @@
   color: #646cff;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for tablets */
 @media (max-width: 768px) {
   #root {
     padding: 2rem;
@@ -89,6 +89,7 @@
   }
 }
 
+/* Responsive adjustments for mobile devices */
 @media (max-width: 480px) {
   #root {
     padding: 1rem;
