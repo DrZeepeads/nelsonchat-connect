@@ -1,15 +1,19 @@
-import { SearchResponse, SearchError } from '../types/search';
+import { SearchResponse, SearchError } from "../types/search";
 
-const API_URL = 'http://localhost:3001';
+const API_URL = "http://localhost:3001";
 
-export async function searchNelson(query: string, volume?: string): Promise<SearchResponse> {
-<<<<<<< main
+export async function searchNelson(
+  query: string,
+  volume?: string
+): Promise<SearchResponse> {
   try {
+    // Construct query parameters
     const params = new URLSearchParams({
       q: query,
-      ...(volume && { volume }), // Add volume parameter if provided
+      ...(volume ? { volume } : {}), // Add volume if provided
     });
 
+    // Setup timeout with AbortController
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10_000); // 10-second timeout
 
@@ -17,41 +21,29 @@ export async function searchNelson(query: string, volume?: string): Promise<Sear
       signal: controller.signal,
     });
 
-    clearTimeout(timeout);
+    clearTimeout(timeout); // Clear timeout after fetch is complete
 
-=======
-  const params = new URLSearchParams({ q: query });
-  if (volume) {
-    params.append('volume', volume);
-  }
-
-  try {
-    const response = await fetch(`${API_URL}/api/search?${params}`);
-    
->>>>>>> origin/main
+    // Handle non-OK responses
     if (!response.ok) {
-      const errorData = await response.json() as SearchError;
-      throw new Error(errorData.error || 'Search failed');
+      const errorData = (await response.json()) as SearchError;
+      throw new Error(errorData.error || "Search failed");
     }
 
-<<<<<<< main
-    console.error('Search API error:', error);
-    throw new Error(
-      error instanceof Error ? error.message : 'An unexpected error occurred.'
-    );
-=======
-    return await response.json() as SearchResponse;
+    // Parse and return response
+    return (await response.json()) as SearchResponse;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error('Search API error:', {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      console.error("Search API request aborted due to timeout:", { query, volume });
+      throw new Error("The search request timed out. Please try again.");
+    } else if (error instanceof Error) {
+      console.error("Search API error:", {
         message: error.message,
         query,
         volume,
       });
     } else {
-      console.error('Unknown error occurred during search');
+      console.error("Unknown error occurred during search:", { query, volume });
     }
     throw error;
->>>>>>> origin/main
   }
 }
