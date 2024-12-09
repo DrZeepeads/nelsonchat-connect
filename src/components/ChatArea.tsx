@@ -1,66 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import ChatInput from "./ChatInput";
-import { Button } from "./ui/button";
-import { Loader2 } from "lucide-react";
-import { searchNelson } from "@/utils/api";
-
-// Define Relevance Levels for Search Results
-enum RelevanceLevel {
-  Low = 1,
-  Medium,
-  High,
-}
-
-// Type Definitions
-interface SearchResult {
-  text: string;
-  volume: string;
-  relevance: RelevanceLevel;
-}
+import { MessageSquare, Loader2 } from "lucide-react";
 
 interface Message {
-  type: "user" | "bot" | "search";
-  content: string | SearchResult[];
+  id: string;
+  type: "user" | "bot";
+  content: string;
   timestamp: Date;
 }
 
-// Message Bubble Component for Reusability
-const MessageBubble: React.FC<{ message: Message }> = ({ message }) => {
-  const isUser = message.type === "user";
-  const isSearch = message.type === "search";
-
-  return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
-      <div
-        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg shadow-sm ${
-          isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
-        }`}
-      >
-        {isSearch && Array.isArray(message.content) ? (
-          <ul>
-            {(message.content as SearchResult[]).map((result, i) => (
-              <li key={i} className="text-sm">
-                <strong>Volume:</strong> {result.volume} -{" "}
-                <em>{result.text}</em> (Relevance: {result.relevance})
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>{message.content as string}</p>
-        )}
-      </div>
-    </div>
-  );
-};
-
 const ChatArea: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      type: "bot",
-      content: "👋 Welcome to NelsonBot! I'm here to assist you with AI-enhanced pediatric care.",
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -72,77 +22,68 @@ const ChatArea: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  const sendMessage = async (message: string) => {
-    if (!message.trim()) return;
+  const handleSendMessage = async (content: string) => {
+    if (!content.trim()) return;
 
-    const newUserMessage: Message = {
+    const newMessage: Message = {
+      id: Date.now().toString(),
       type: "user",
-      content: message,
+      content,
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, newUserMessage]);
+    setMessages((prev) => [...prev, newMessage]);
     setIsLoading(true);
 
     try {
-      if (message.startsWith("/search ")) {
-        const query = message.slice(8).trim();
-        const results = await searchNelson(query);
-
-        const searchMessage: Message = {
-          type: "search",
-          content: results,
-          timestamp: new Date(),
-        };
-
-        setMessages((prev) => [...prev, searchMessage]);
-      } else {
-        // Simulating an AI response (replace with actual API call)
+      // Simulate bot response
+      setTimeout(() => {
         const botMessage: Message = {
+          id: (Date.now() + 1).toString(),
           type: "bot",
-          content: `You asked: "${message}". This is a placeholder response.`,
+          content: `I understand you're asking about "${content}". This is a placeholder response.`,
           timestamp: new Date(),
         };
-
         setMessages((prev) => [...prev, botMessage]);
-      }
+        setIsLoading(false);
+      }, 1000);
     } catch (error) {
-      console.error("Error while processing message:", error);
-
-      const errorMessage: Message = {
-        type: "bot",
-        content: "Sorry, an error occurred while processing your request. Please try again.",
-        timestamp: new Date(),
-      };
-
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
+      console.error("Error processing message:", error);
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col w-full h-screen bg-gray-100">
-      {/* Chat Messages */}
+    <div className="flex flex-col h-[600px] bg-white rounded-lg shadow-sm border border-gray-200">
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((msg, index) => (
-          <MessageBubble key={index} message={msg} />
+        {messages.map((msg) => (
+          <div
+            key={msg.id}
+            className={`flex ${msg.type === "user" ? "justify-end" : "justify-start"}`}
+          >
+            <div
+              className={`max-w-[80%] p-3 rounded-lg ${
+                msg.type === "user"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-100 text-gray-800"
+              }`}
+            >
+              <p>{msg.content}</p>
+            </div>
+          </div>
         ))}
 
         {isLoading && (
-          <div className="flex justify-start">
-            <div className="flex items-center space-x-2 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg shadow-sm">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Thinking...</span>
-            </div>
+          <div className="flex items-center space-x-2 text-gray-500">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            <span>NelsonBot is thinking...</span>
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Chat Input */}
-      <div className="p-4 bg-white border-t border-gray-300">
-        <ChatInput onSendMessage={sendMessage} disabled={isLoading} />
+      <div className="border-t border-gray-200 p-4">
+        <ChatInput onSendMessage={handleSendMessage} disabled={isLoading} />
       </div>
     </div>
   );
