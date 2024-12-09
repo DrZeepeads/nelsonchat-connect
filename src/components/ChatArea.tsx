@@ -41,7 +41,7 @@ const ChatArea: React.FC = () => {
         const botMessage: Message = {
           id: (Date.now() + 1).toString(),
           type: "bot",
-          content: `I understand you're asking about "${content}". This is a placeholder response.`,
+          content: `I understand you're asking about "${content}". Let me help you with that.`,
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, botMessage]);
@@ -54,7 +54,7 @@ const ChatArea: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[600px] bg-white rounded-lg shadow-sm border border-gray-200">
+    <div className="flex flex-col h-[600px] bg-background rounded-lg shadow-sm border border-border">
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((msg) => (
           <div
@@ -64,8 +64,8 @@ const ChatArea: React.FC = () => {
             <div
               className={`max-w-[80%] p-3 rounded-lg ${
                 msg.type === "user"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-100 text-gray-800"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-foreground"
               }`}
             >
               <p>{msg.content}</p>
@@ -74,7 +74,7 @@ const ChatArea: React.FC = () => {
         ))}
 
         {isLoading && (
-          <div className="flex items-center space-x-2 text-gray-500">
+          <div className="flex items-center space-x-2 text-muted-foreground">
             <Loader2 className="w-4 h-4 animate-spin" />
             <span>NelsonBot is thinking...</span>
           </div>
@@ -82,7 +82,7 @@ const ChatArea: React.FC = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="border-t border-gray-200 p-4">
+      <div className="border-t border-border p-4">
         <ChatInput onSendMessage={handleSendMessage} disabled={isLoading} />
       </div>
     </div>

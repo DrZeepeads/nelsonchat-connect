@@ -1,21 +1,26 @@
 import { DirectionProvider } from "@radix-ui/react-direction";
 import ChatArea from "@/components/ChatArea";
 import Header from "@/components/Header";
-import { useState } from "react";
+import { Menubar } from "@/components/ui/menubar";
 
 const Index = () => {
   return (
     <DirectionProvider dir="ltr">
-      <div className="min-h-screen flex flex-col bg-[#ffffff]">
+      <div className="min-h-screen flex flex-col bg-background">
         <Header />
-        <main className="flex-1 container mx-auto max-w-4xl px-4">
-          <div className="mt-8 text-center">
-            <h1 className="text-4xl font-bold text-gray-800 mb-4">
-              Welcome to NelsonBot
-            </h1>
-            <p className="text-gray-600 mb-8">
-              Your AI-powered pediatric assistant
-            </p>
+        <div className="flex-1 container mx-auto max-w-4xl px-4 py-8">
+          <div className="mb-8">
+            <Menubar className="border-none bg-transparent justify-end" />
+          </div>
+          <div className="space-y-8">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-foreground mb-4">
+                Welcome to NelsonBot
+              </h1>
+              <p className="text-muted-foreground">
+                Your AI-powered pediatric assistant
+              </p>
+            </div>
             
             {/* Suggested Prompts */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
@@ -36,12 +41,10 @@ const Index = () => {
                 description="Explore pediatric nutrition and dietary recommendations"
               />
             </div>
-          </div>
-          
-          <div className="flex-1">
+            
             <ChatArea />
           </div>
-        </main>
+        </div>
       </div>
     </DirectionProvider>
   );
@@ -50,14 +53,13 @@ const Index = () => {
 // Suggested Prompt Component
 const SuggestedPrompt = ({ title, description }: { title: string; description: string }) => (
   <button 
-    className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left"
+    className="p-4 border border-border rounded-lg hover:bg-accent transition-colors text-left"
     onClick={() => {
-      // TODO: Implement prompt selection
       console.log(`Selected prompt: ${title}`);
     }}
   >
-    <h3 className="font-semibold text-gray-800">{title}</h3>
-    <p className="text-sm text-gray-600">{description}</p>
+    <h3 className="font-semibold text-foreground">{title}</h3>
+    <p className="text-sm text-muted-foreground">{description}</p>
   </button>
 );
 
