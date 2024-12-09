@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
   // Server configuration for development
@@ -20,7 +19,6 @@ export default defineConfig(({ mode }) => ({
   // Plugins for Vite
   plugins: [
     react(), // Enable React support with JSX
-    mode === "development" && componentTagger(), // Enable component tagging only in development
     VitePWA({
       registerType: "autoUpdate", // Automatically update the service worker
       devOptions: {
@@ -81,7 +79,7 @@ export default defineConfig(({ mode }) => ({
         ],
       },
     }),
-  ].filter(Boolean), // Remove `false` values from the plugin array
+  ],
 
   // Resolve module aliases
   resolve: {
